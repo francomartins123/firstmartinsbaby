@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Your Predictions - First Martins Baby</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="guessing-container">
+        <header class="guessing-header">
+            <h1 class="baby-title">🎯 Baby Predictions 🎯</h1>
+            <p class="guessing-welcome">Make your predictions!</p>
+        </header>
+
+        <main class="guessing-main">
+            <div class="guessing-card">
+                <form id="guessingForm" class="guessing-form">
+                    
+                    <!-- Due Date -->
+                    <div class="prediction-group">
+                        <label for="dueDate" class="prediction-label">
+                            📅 When will baby arrive?
+                        </label>
+                        <input type="date" id="dueDate" name="dueDate" required class="date-input">
+                    </div>
+
+                    <!-- Weight -->
+                    <div class="prediction-group">
+                        <label for="weight" class="prediction-label">
+                            ⚖️ How much will baby weigh?
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="weight" name="weight" min="4" max="12" step="0.25" value="7.5" class="weight-slider">
+                            <div class="weight-display">
+                                <span id="weightValue">7.5 lbs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Name -->
+                    <div class="prediction-group">
+                        <label for="middleName" class="prediction-label">
+                            ✨ What will baby's middle name be?
+                        </label>
+                        <input type="text" id="middleName" name="middleName" required placeholder="Enter your guess..." class="text-input">
+                    </div>
+
+                    <!-- Birth Time -->
+                    <div class="prediction-group">
+                        <label for="birthTime" class="prediction-label">
+                            🕐 What time will baby be born?
+                        </label>
+                        <input type="time" id="birthTime" name="birthTime" required class="time-input">
+                    </div>
+
+                    <!-- Eye Color -->
+                    <div class="prediction-group">
+                        <label class="prediction-label">👀 What color will baby's eyes be?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="eyeColor" value="Blue" required>
+                                <span class="radio-custom blue"></span>
+                                Blue
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="eyeColor" value="Brown" required>
+                                <span class="radio-custom brown"></span>
+                                Brown
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="eyeColor" value="Green" required>
+                                <span class="radio-custom green"></span>
+                                Green
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="eyeColor" value="Hazel" required>
+                                <span class="radio-custom hazel"></span>
+                                Hazel
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Hair Color -->
+                    <div class="prediction-group">
+                        <label class="prediction-label">💇 What will baby's hair be like?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="hairColor" value="Blonde" required>
+                                <span class="radio-custom blonde"></span>
+                                Blonde
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="hairColor" value="Brown" required>
+                                <span class="radio-custom brown-hair"></span>
+                                Brown
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="hairColor" value="Black" required>
+                                <span class="radio-custom black-hair"></span>
+                                Black
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="hairColor" value="Bald" required>
+                                <span class="radio-custom bald"></span>
+                                Bald
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Length -->
+                    <div class="prediction-group">
+                        <label for="length" class="prediction-label">
+                            📏 How long will baby be?
+                        </label>
+                        <select id="length" name="length" required class="select-input">
+                            <option value="">Choose length...</option>
+                            <option value="16">16 inches</option>
+                            <option value="17">17 inches</option>
+                            <option value="18">18 inches</option>
+                            <option value="19">19 inches</option>
+                            <option value="20">20 inches</option>
+                            <option value="21">21 inches</option>
+                            <option value="22">22 inches</option>
+                            <option value="23">23 inches</option>
+                            <option value="24">24 inches</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-predictions-btn">
+                        Submit My Predictions! 🌸
+                    </button>
+                    
+                </form>
+            </div>
+        </main>
+
+        <footer class="guessing-footer">
+            <p>Take your time and have fun with your guesses! 💕</p>
+        </footer>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
