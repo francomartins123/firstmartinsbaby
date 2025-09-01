@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    padding: 1rem 0;
+}
+
+.logo h1 {
+    color: #e91e63;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+main {
+    margin-top: 80px;
+}
+
+.hero {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    color: #880e4f;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: #ad1457;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.content {
+    padding: 4rem 0;
+}
+
+.content h3 {
+    font-size: 2rem;
+    color: #e91e63;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.content p {
+    font-size: 1.1rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #666;
+}
+
+footer {
+    background: #f5f5f5;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+footer p {
+    text-align: center;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .content h3 {
+        font-size: 1.5rem;
+    }
+}
