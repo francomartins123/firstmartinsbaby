@@ -89,35 +89,42 @@ body {
 /* === WELCOME SCREEN === */
 .welcome-content {
     text-align: center;
-    max-width: 600px;
+    max-width: 800px;
     padding: 2rem;
-    background: rgba(255,255,255,0.9);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    backdrop-filter: blur(10px);
+    /* Remove white background box */
 }
 
 .due-date {
-    font-size: 1.2rem;
-    color: #FF6B9D;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    font-family: 'Fredoka', cursive;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
 }
 
 .main-title {
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #4A90E2;
-    text-shadow: 3px 3px 0px #FF6B9D, 6px 6px 0px #FFB347;
+    font-size: 6rem;
+    font-weight: 900;
+    font-family: 'Fredoka', cursive;
+    color: #FFB6C1;
+    text-shadow: 
+        4px 4px 0px #000000,
+        8px 8px 0px #4A90E2,
+        12px 12px 0px #FF69B4;
     margin-bottom: 1rem;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    line-height: 1.1;
+    text-transform: uppercase;
 }
 
 .welcome-subtitle {
-    font-size: 1.3rem;
-    color: #666;
+    font-size: 1.4rem;
+    color: #000;
     margin-bottom: 2rem;
-    font-weight: 400;
+    font-weight: 500;
+    font-family: 'Fredoka', cursive;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
 }
 
 .name-form {
@@ -403,7 +410,19 @@ body {
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
     .main-title {
-        font-size: 2.5rem;
+        font-size: 3.5rem;
+        text-shadow: 
+            3px 3px 0px #000000,
+            6px 6px 0px #4A90E2,
+            9px 9px 0px #FF69B4;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .due-date {
+        font-size: 1.1rem;
     }
     
     .options-container {
@@ -422,5 +441,15 @@ body {
     
     .decoration {
         font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 2.8rem;
+    }
+    
+    .welcome-content {
+        padding: 1rem;
     }
 }
