@@ -77,30 +77,28 @@ let answers = {};
 let db;
 
 // Initialize the app
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     console.log('🎯 Quiz app starting...');
     
-    // Initialize database
-    if (typeof SupabaseDB !== 'undefined') {
-        try {
-            db = new SupabaseDB();
-            console.log('✅ Database initialized');
-        } catch (error) {
-            console.error('❌ Database initialization failed:', error);
-        }
-    } else {
-        console.error('❌ SupabaseDB not found - continuing without database');
-    }
-    
-    // Setup event listeners
+    // Setup event listeners first
     setupEventListeners();
     
-    // Load existing participants for results screen
-    try {
-        await loadExistingParticipants();
-    } catch (error) {
-        console.error('⚠️ Error loading existing participants:', error);
-    }
+    // Initialize database later (non-blocking)
+    setTimeout(() => {
+        if (typeof SupabaseDB !== 'undefined') {
+            try {
+                db = new SupabaseDB();
+                console.log('✅ Database initialized');
+                loadExistingParticipants().catch(err => {
+                    console.error('⚠️ Error loading existing participants:', err);
+                });
+            } catch (error) {
+                console.error('❌ Database initialization failed:', error);
+            }
+        } else {
+            console.error('❌ SupabaseDB not found - continuing without database');
+        }
+    }, 100);
     
     console.log('🚀 Quiz app initialized successfully');
 });
@@ -108,13 +106,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 function setupEventListeners() {
     console.log('🔗 Setting up event listeners...');
     
-    // Name form submission
+    // Name form submission with multiple fallbacks
     const nameForm = document.getElementById('nameForm');
+    const startBtn = document.querySelector('.start-btn');
+    
     if (nameForm) {
         nameForm.addEventListener('submit', handleNameSubmit);
+        nameForm.onsubmit = handleNameSubmit; // Fallback
         console.log('✅ Name form listener added');
     } else {
         console.error('❌ Name form not found!');
+    }
+    
+    if (startBtn) {
+        startBtn.addEventListener('click', (e) => {
+            console.log('🔘 Start button clicked');
+            handleNameSubmit(e);
+        });
+        console.log('✅ Start button listener added');
     }
     
     // Option selection
@@ -136,40 +145,28 @@ function setupEventListeners() {
     }
 }
 
-async function handleNameSubmit(e) {
+function handleNameSubmit(e) {
+    console.log('🎯 Form submitted, preventing default...');
     e.preventDefault();
+    e.stopPropagation();
     
     const nameInput = document.getElementById('playerName');
     const name = nameInput.value.trim();
     
     if (!name) {
         alert('Please enter your name!');
-        return;
+        return false;
     }
     
     console.log(`👋 Starting quiz for: ${name}`);
     playerName = name;
     
-    // Check if name already exists (but don't block if database fails)
-    if (db) {
-        try {
-            const exists = await db.checkNameExists(name);
-            if (exists) {
-                alert('Someone with that name has already made guesses! Please use a different name or add your last initial.');
-                return;
-            }
-        } catch (error) {
-            console.error('⚠️ Error checking name (continuing anyway):', error);
-            // Continue with quiz even if name check fails
-        }
-    } else {
-        console.log('⚠️ Database not available, continuing without name check');
-    }
-    
-    // Start the quiz - this should always happen
+    // Start the quiz immediately without database checks for now
     console.log('🎯 Starting quiz...');
     showScreen('quizScreen');
     loadQuestion(0);
+    
+    return false; // Prevent any form submission
 }
 
 function showScreen(screenId) {
