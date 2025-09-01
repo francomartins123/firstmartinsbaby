@@ -82,32 +82,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Initialize database
     if (typeof SupabaseDB !== 'undefined') {
-        db = new SupabaseDB();
-        console.log('✅ Database initialized');
+        try {
+            db = new SupabaseDB();
+            console.log('✅ Database initialized');
+        } catch (error) {
+            console.error('❌ Database initialization failed:', error);
+        }
     } else {
-        console.error('❌ SupabaseDB not found');
+        console.error('❌ SupabaseDB not found - continuing without database');
     }
     
     // Setup event listeners
     setupEventListeners();
     
     // Load existing participants for results screen
-    await loadExistingParticipants();
+    try {
+        await loadExistingParticipants();
+    } catch (error) {
+        console.error('⚠️ Error loading existing participants:', error);
+    }
+    
+    console.log('🚀 Quiz app initialized successfully');
 });
 
 function setupEventListeners() {
+    console.log('🔗 Setting up event listeners...');
+    
     // Name form submission
     const nameForm = document.getElementById('nameForm');
     if (nameForm) {
         nameForm.addEventListener('submit', handleNameSubmit);
+        console.log('✅ Name form listener added');
+    } else {
+        console.error('❌ Name form not found!');
     }
     
     // Option selection
     const optionA = document.getElementById('optionA');
     const optionB = document.getElementById('optionB');
     
-    if (optionA) optionA.addEventListener('click', () => selectOption('A'));
-    if (optionB) optionB.addEventListener('click', () => selectOption('B'));
+    if (optionA) {
+        optionA.addEventListener('click', () => selectOption('A'));
+        console.log('✅ Option A listener added');
+    } else {
+        console.warn('⚠️ Option A not found (normal on load)');
+    }
+    
+    if (optionB) {
+        optionB.addEventListener('click', () => selectOption('B'));
+        console.log('✅ Option B listener added');
+    } else {
+        console.warn('⚠️ Option B not found (normal on load)');
+    }
 }
 
 async function handleNameSubmit(e) {
@@ -124,7 +150,7 @@ async function handleNameSubmit(e) {
     console.log(`👋 Starting quiz for: ${name}`);
     playerName = name;
     
-    // Check if name already exists
+    // Check if name already exists (but don't block if database fails)
     if (db) {
         try {
             const exists = await db.checkNameExists(name);
@@ -133,16 +159,22 @@ async function handleNameSubmit(e) {
                 return;
             }
         } catch (error) {
-            console.error('Error checking name:', error);
+            console.error('⚠️ Error checking name (continuing anyway):', error);
+            // Continue with quiz even if name check fails
         }
+    } else {
+        console.log('⚠️ Database not available, continuing without name check');
     }
     
-    // Start the quiz
+    // Start the quiz - this should always happen
+    console.log('🎯 Starting quiz...');
     showScreen('quizScreen');
     loadQuestion(0);
 }
 
 function showScreen(screenId) {
+    console.log(`🔄 Switching to screen: ${screenId}`);
+    
     // Hide all screens
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -152,12 +184,17 @@ function showScreen(screenId) {
     const targetScreen = document.getElementById(screenId);
     if (targetScreen) {
         targetScreen.classList.add('active');
+        console.log(`✅ Screen ${screenId} is now active`);
+    } else {
+        console.error(`❌ Screen ${screenId} not found!`);
     }
 }
 
 function loadQuestion(index) {
+    console.log(`📝 Loading question ${index + 1} of ${questions.length}`);
+    
     if (index >= questions.length) {
-        // Quiz completed
+        console.log('🎉 Quiz completed, moving to results');
         completeQuiz();
         return;
     }
@@ -168,12 +205,16 @@ function loadQuestion(index) {
     // Update progress
     updateProgress();
     
-    // Update question content
-    document.getElementById('questionTitle').textContent = question.title;
-    document.querySelector('#optionA .option-text').innerHTML = question.optionA.text;
-    document.querySelector('#optionB .option-text').innerHTML = question.optionB.text;
+    // Update question content with error checking
+    const titleElement = document.getElementById('questionTitle');
+    const optionAElement = document.querySelector('#optionA .option-text');
+    const optionBElement = document.querySelector('#optionB .option-text');
     
-    console.log(`❓ Loaded question ${index + 1}: ${question.title}`);
+    if (titleElement) titleElement.textContent = question.title;
+    if (optionAElement) optionAElement.innerHTML = question.optionA.text;
+    if (optionBElement) optionBElement.innerHTML = question.optionB.text;
+    
+    console.log(`✅ Question loaded: ${question.title}`);
 }
 
 function updateProgress() {
