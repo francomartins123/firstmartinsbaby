@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Database</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+</head>
+<body>
+    <h1>Clear Database</h1>
+    <button onclick="clearData()">Clear All Data</button>
+    <div id="status"></div>
+
+    <script>
+        async function clearData() {
+            const status = document.getElementById('status');
+            status.textContent = 'Clearing data...';
+            
+            try {
+                await db.clearAllData();
+                status.textContent = 'Data cleared successfully!';
+                status.style.color = 'green';
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+                status.style.color = 'red';
+                console.error('Clear data error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

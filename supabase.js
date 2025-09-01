@@ -122,5 +122,32 @@ const db = {
             .subscribe();
 
         return subscription;
+    },
+
+    // Clear all data from tables
+    async clearAllData() {
+        // First delete all guesses
+        const { error: guessesError } = await supabaseClient
+            .from('guesses')
+            .delete()
+            .neq('id', 'impossible-value-to-match-all');
+
+        if (guessesError) {
+            console.error('Error clearing guesses:', guessesError);
+            throw guessesError;
+        }
+
+        // Then delete all participants
+        const { error: participantsError } = await supabaseClient
+            .from('participants')
+            .delete()
+            .neq('id', 'impossible-value-to-match-all');
+
+        if (participantsError) {
+            console.error('Error clearing participants:', participantsError);
+            throw participantsError;
+        }
+
+        console.log('All data cleared successfully');
     }
 };
