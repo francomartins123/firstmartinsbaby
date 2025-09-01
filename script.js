@@ -114,4 +114,187 @@ function handleGuessingPage() {
     const participantName = sessionStorage.getItem('participantName');
     const welcomeText = document.querySelector('.guessing-welcome');
     if (welcomeText && participantName) {
-        welcomeText.textContent = `Hello ${participantName}! Make your predictions:`;\n    }\n    \n    // Set up date picker with reasonable range around due date\n    const dueDateInput = document.getElementById('dueDate');\n    if (dueDateInput) {\n        // Due date is October 14, 2025\n        dueDateInput.min = '2025-09-01';\n        dueDateInput.max = '2025-11-30';\n        dueDateInput.value = '2025-10-14'; // Default to actual due date\n    }\n    \n    // Set up weight slider\n    const weightSlider = document.getElementById('weight');\n    const weightValue = document.getElementById('weightValue');\n    if (weightSlider && weightValue) {\n        weightSlider.addEventListener('input', function() {\n            weightValue.textContent = `${this.value} lbs`;\n        });\n        // Trigger initial display\n        weightValue.textContent = `${weightSlider.value} lbs`;\n    }\n    \n    // Handle form submission\n    const form = document.getElementById('guessingForm');\n    form.addEventListener('submit', async function(e) {\n        e.preventDefault();\n        \n        // Collect all guesses\n        const guesses = {\n            due_date: document.getElementById('dueDate').value,\n            weight: document.getElementById('weight').value,\n            middle_name: document.getElementById('middleName').value.trim(),\n            birth_time: document.getElementById('birthTime').value,\n            eye_color: document.querySelector('input[name=\"eyeColor\"]:checked')?.value,\n            hair_color: document.querySelector('input[name=\"hairColor\"]:checked')?.value,\n            length: document.getElementById('length').value\n        };\n        \n        // Validate all fields are filled\n        const missingFields = [];\n        Object.entries(guesses).forEach(([key, value]) => {\n            if (!value || value.trim() === '') {\n                missingFields.push(key.replace('_', ' '));\n            }\n        });\n        \n        if (missingFields.length > 0) {\n            alert(`Please fill in: ${missingFields.join(', ')}`);\n            return;\n        }\n        \n        // Add loading state\n        form.classList.add('loading');\n        \n        try {\n            await db.saveGuesses(participantId, guesses);\n            \n            // Clear session storage\n            sessionStorage.clear();\n            \n            // Redirect to results page\n            window.location.href = 'results.html';\n            \n        } catch (error) {\n            console.error('Error saving guesses:', error);\n            alert('Something went wrong saving your guesses. Please try again.');\n            form.classList.remove('loading');\n        }\n    });\n}\n\n// === RESULTS PAGE FUNCTIONALITY ===\nfunction handleResultsPage() {\n    loadAndDisplayResults();\n    \n    // Set up real-time updates\n    const subscription = db.subscribeToParticipants(() => {\n        loadAndDisplayResults();\n    });\n    \n    // Clean up subscription when page is closed\n    window.addEventListener('beforeunload', () => {\n        if (subscription) {\n            subscription.unsubscribe();\n        }\n    });\n}\n\nasync function loadAndDisplayResults() {\n    try {\n        const participants = await db.getAllParticipantsWithGuesses();\n        displayFlowerGarden(participants);\n    } catch (error) {\n        console.error('Error loading results:', error);\n    }\n}\n\nfunction displayFlowerGarden(participants) {\n    const container = document.getElementById('resultsContainer');\n    container.innerHTML = '';\n    \n    participants.forEach((participant, index) => {\n        const flower = createFlower(participant, index);\n        container.appendChild(flower);\n    });\n    \n    // Update count\n    const countElement = document.getElementById('participantCount');\n    if (countElement) {\n        countElement.textContent = participants.length;\n    }\n}\n\nfunction createFlower(participant, index) {\n    const flowerDiv = document.createElement('div');\n    flowerDiv.className = 'flower';\n    \n    // Position flower randomly\n    const x = Math.random() * 80; // 0-80% to leave some margin\n    const y = Math.random() * 80;\n    flowerDiv.style.left = `${x}%`;\n    flowerDiv.style.top = `${y}%`;\n    \n    // Choose flower type\n    const flowerTypes = ['🌸', '🌼', '🌺', '🌻', '🌷', '🌹', '💮', '🏵️'];\n    const flowerIcon = flowerTypes[index % flowerTypes.length];\n    \n    // Convert guesses array to object\n    const guessesObj = {};\n    participant.guesses.forEach(guess => {\n        guessesObj[guess.question_type] = guess.guess_value;\n    });\n    \n    flowerDiv.innerHTML = `\n        <div class=\"flower-icon\">${flowerIcon}</div>\n        <div class=\"flower-content\">\n            <div class=\"flower-name\">${participant.name}</div>\n            <div class=\"flower-guesses\">\n                <div>Due: ${formatDate(guessesObj.due_date)}</div>\n                <div>Weight: ${guessesObj.weight} lbs</div>\n                <div>Name: ${guessesObj.middle_name}</div>\n                <div>Time: ${guessesObj.birth_time}</div>\n                <div>Eyes: ${guessesObj.eye_color}</div>\n                <div>Hair: ${guessesObj.hair_color}</div>\n                <div>Length: ${guessesObj.length}\"</div>\n            </div>\n        </div>\n    `;\n    \n    return flowerDiv;\n}\n\nfunction formatDate(dateString) {\n    if (!dateString) return 'N/A';\n    const date = new Date(dateString);\n    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });\n}\n\n// === UTILITY FUNCTIONS ===\nfunction showLoading(element) {\n    element.classList.add('loading');\n}\n\nfunction hideLoading(element) {\n    element.classList.remove('loading');\n}"
+        welcomeText.textContent = `Hello ${participantName}! Make your predictions:`;
+    }
+    
+    // Set up date picker with reasonable range around due date
+    const dueDateInput = document.getElementById('dueDate');
+    if (dueDateInput) {
+        // Due date is October 14, 2025
+        dueDateInput.min = '2025-09-01';
+        dueDateInput.max = '2025-11-30';
+        dueDateInput.value = '2025-10-14'; // Default to actual due date
+    }
+    
+    // Set up weight slider
+    const weightSlider = document.getElementById('weight');
+    const weightValue = document.getElementById('weightValue');
+    if (weightSlider && weightValue) {
+        weightSlider.addEventListener('input', function() {
+            weightValue.textContent = `${this.value} lbs`;
+        });
+        // Trigger initial display
+        weightValue.textContent = `${weightSlider.value} lbs`;
+    }
+    
+    // Handle form submission
+    const form = document.getElementById('guessingForm');
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        console.log('🎯 Form submission started');
+        console.log('Participant ID:', participantId);
+        
+        // Check if Supabase client is ready
+        if (!supabaseClient) {
+            console.error('❌ Supabase client not ready');
+            alert('Database connection not ready. Please refresh and try again.');
+            return;
+        }
+        
+        // Collect all guesses
+        const guesses = {
+            due_date: document.getElementById('dueDate').value,
+            weight: document.getElementById('weight').value,
+            middle_name: document.getElementById('middleName').value.trim(),
+            birth_time: document.getElementById('birthTime').value,
+            eye_color: document.querySelector('input[name="eyeColor"]:checked')?.value,
+            hair_color: document.querySelector('input[name="hairColor"]:checked')?.value,
+            length: document.getElementById('length').value
+        };
+        
+        console.log('📝 Collected guesses:', guesses);
+        
+        // Validate all fields are filled
+        const missingFields = [];
+        Object.entries(guesses).forEach(([key, value]) => {
+            if (!value || value.trim() === '') {
+                missingFields.push(key.replace('_', ' '));
+            }
+        });
+        
+        if (missingFields.length > 0) {
+            console.log('❌ Missing fields:', missingFields);
+            alert(`Please fill in: ${missingFields.join(', ')}`);
+            return;
+        }
+        
+        // Add loading state
+        form.classList.add('loading');
+        
+        try {
+            console.log('💾 Saving guesses to database...');
+            await db.saveGuesses(participantId, guesses);
+            console.log('✅ Guesses saved successfully');
+            
+            // Clear session storage
+            sessionStorage.clear();
+            console.log('🧹 Session storage cleared');
+            
+            // Redirect to results page
+            console.log('🔄 Redirecting to results page...');
+            window.location.href = 'results.html';
+            
+        } catch (error) {
+            console.error('❌ Error saving guesses:', error);
+            alert(`Something went wrong saving your guesses: ${error.message || 'Unknown error'}. Please try again.`);
+            form.classList.remove('loading');
+        }
+    });
+}
+
+// === RESULTS PAGE FUNCTIONALITY ===
+function handleResultsPage() {
+    loadAndDisplayResults();
+    
+    // Set up real-time updates
+    const subscription = db.subscribeToParticipants(() => {
+        loadAndDisplayResults();
+    });
+    
+    // Clean up subscription when page is closed
+    window.addEventListener('beforeunload', () => {
+        if (subscription) {
+            subscription.unsubscribe();
+        }
+    });
+}
+
+async function loadAndDisplayResults() {
+    try {
+        const participants = await db.getAllParticipantsWithGuesses();
+        displayFlowerGarden(participants);
+    } catch (error) {
+        console.error('Error loading results:', error);
+    }
+}
+
+function displayFlowerGarden(participants) {
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = '';
+    
+    participants.forEach((participant, index) => {
+        const flower = createFlower(participant, index);
+        container.appendChild(flower);
+    });
+    
+    // Update count
+    const countElement = document.getElementById('participantCount');
+    if (countElement) {
+        countElement.textContent = participants.length;
+    }
+}
+
+function createFlower(participant, index) {
+    const flowerDiv = document.createElement('div');
+    flowerDiv.className = 'flower';
+    
+    // Position flower randomly
+    const x = Math.random() * 80; // 0-80% to leave some margin
+    const y = Math.random() * 80;
+    flowerDiv.style.left = `${x}%`;
+    flowerDiv.style.top = `${y}%`;
+    
+    // Choose flower type
+    const flowerTypes = ['🌸', '🌼', '🌺', '🌻', '🌷', '🌹', '💮', '🏵️'];
+    const flowerIcon = flowerTypes[index % flowerTypes.length];
+    
+    // Convert guesses array to object
+    const guessesObj = {};
+    participant.guesses.forEach(guess => {
+        guessesObj[guess.question_type] = guess.guess_value;
+    });
+    
+    flowerDiv.innerHTML = `
+        <div class="flower-icon">${flowerIcon}</div>
+        <div class="flower-content">
+            <div class="flower-name">${participant.name}</div>
+            <div class="flower-guesses">
+                <div>Due: ${formatDate(guessesObj.due_date)}</div>
+                <div>Weight: ${guessesObj.weight} lbs</div>
+                <div>Name: ${guessesObj.middle_name}</div>
+                <div>Time: ${guessesObj.birth_time}</div>
+                <div>Eyes: ${guessesObj.eye_color}</div>
+                <div>Hair: ${guessesObj.hair_color}</div>
+                <div>Length: ${guessesObj.length}"</div>
+            </div>
+        </div>
+    `;
+    
+    return flowerDiv;
+}
+
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// === UTILITY FUNCTIONS ===
+function showLoading(element) {
+    element.classList.add('loading');
+}
+
+function hideLoading(element) {
+    element.classList.remove('loading');
+}
