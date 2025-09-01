@@ -248,29 +248,34 @@ function createFlower(participant, index) {
     flowerDiv.style.left = `${x}%`;
     flowerDiv.style.top = `${y}%`;
     
-    // Choose flower type
-    const flowerTypes = ['🌸', '🌼', '🌺', '🌻', '🌷', '🌹', '💮', '🏵️'];
-    const flowerIcon = flowerTypes[index % flowerTypes.length];
-    
     // Convert guesses array to object
     const guessesObj = {};
     participant.guesses.forEach(guess => {
         guessesObj[guess.question_type] = guess.guess_value;
     });
     
+    // Create petals with guess data
+    const petalData = [
+        { label: 'Due', value: formatDate(guessesObj.due_date) },
+        { label: 'Weight', value: `${guessesObj.weight} lbs` },
+        { label: 'Name', value: guessesObj.middle_name },
+        { label: 'Time', value: guessesObj.birth_time },
+        { label: 'Eyes', value: guessesObj.eye_color },
+        { label: 'Hair', value: guessesObj.hair_color }
+    ];
+    
+    const petalsHTML = petalData.map(petal => `
+        <div class="flower-petal">
+            <div class="petal-text">${petal.value}</div>
+        </div>
+    `).join('');
+    
     flowerDiv.innerHTML = `
-        <div class="flower-icon">${flowerIcon}</div>
-        <div class="flower-content">
-            <div class="flower-name">${participant.name}</div>
-            <div class="flower-guesses">
-                <div>Due: ${formatDate(guessesObj.due_date)}</div>
-                <div>Weight: ${guessesObj.weight} lbs</div>
-                <div>Name: ${guessesObj.middle_name}</div>
-                <div>Time: ${guessesObj.birth_time}</div>
-                <div>Eyes: ${guessesObj.eye_color}</div>
-                <div>Hair: ${guessesObj.hair_color}</div>
-                <div>Length: ${guessesObj.length}"</div>
-            </div>
+        ${petalsHTML}
+        <div class="flower-center"></div>
+        <div class="flower-stem"></div>
+        <div class="flower-pot">
+            <div class="pot-text">${participant.name}</div>
         </div>
     `;
     

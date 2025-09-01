@@ -27,11 +27,11 @@
                     }
                 });
 
-                // Delete all guesses first (to avoid foreign key constraints)
+                // Delete all guesses first (to avoid foreign key constraints) 
                 const { error: guessesError } = await adminClient
                     .from('guesses')
                     .delete()
-                    .neq('id', 'impossible-value-to-match-all');
+                    .gte('created_at', '1900-01-01');
 
                 if (guessesError) {
                     throw new Error('Failed to clear guesses: ' + guessesError.message);
@@ -41,7 +41,7 @@
                 const { error: participantsError } = await adminClient
                     .from('participants')  
                     .delete()
-                    .neq('id', 'impossible-value-to-match-all');
+                    .gte('submitted_at', '1900-01-01');
 
                 if (participantsError) {
                     throw new Error('Failed to clear participants: ' + participantsError.message);

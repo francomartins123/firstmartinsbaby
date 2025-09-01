@@ -10,45 +10,78 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-    <div class="baby-container">
-        <header class="baby-header">
-            <p class="baby-subtitle">Due Date: October 14th, 2025 💕</p>
-            <h1 class="baby-title">🍼 First Martins Baby 🍼</h1>
-            <p class="baby-subtitle">Join our family guessing game!</p>
-        </header>
+<body class="sky-background">
+    <!-- Decorative elements -->
+    <div class="decoration smiley smiley-1">😊</div>
+    <div class="decoration smiley smiley-2">😊</div>
+    <div class="decoration smiley smiley-3">😊</div>
+    <div class="decoration star star-1">⭐</div>
+    <div class="decoration star star-2">⭐</div>
+    <div class="decoration star star-3">⭐</div>
+    <div class="decoration heart heart-1">💕</div>
+    <div class="decoration heart heart-2">💕</div>
 
-        <main class="entry-main">
-            <div class="entry-card">
-                <h2>Welcome to the Fun!</h2>
-                <p class="entry-description">
-                    We can't wait to meet our little one! Help us celebrate by making your predictions about our baby.
-                </p>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="welcome-content">
+            <div class="due-date">Due Date: October 14th, 2025</div>
+            <h1 class="main-title">FIRST MARTINS BABY</h1>
+            <p class="welcome-subtitle">Make your guesses about our little bundle of joy!</p>
+            
+            <form id="nameForm" class="name-form">
+                <input type="text" id="playerName" placeholder="Enter your name" required>
+                <button type="submit" class="start-btn">Start Guessing! 🎯</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quizScreen" class="screen">
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentQuestion">1</span> of <span id="totalQuestions">6</span>
+            </div>
+        </div>
+
+        <div class="question-container">
+            <div class="question-card">
+                <h2 id="questionTitle" class="question-title"></h2>
                 
-                <form id="entryForm" class="entry-form">
-                    <div class="input-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                <div class="options-container">
+                    <div class="option-card option-left" id="optionA">
+                        <div class="option-content">
+                            <div class="option-label">A</div>
+                            <div class="option-text"></div>
+                        </div>
                     </div>
                     
-                    
-                    <button type="submit" class="start-guessing-btn">
-                        Start Guessing! 🎯
-                    </button>
-                    
-                    <!-- Temporary test button -->
-                    <button type="button" onclick="window.location.href='guessing.html'" style="margin-top: 1rem; background: #4caf50; color: white; padding: 0.5rem; border: none; border-radius: 8px;">
-                        Test Navigation (Skip Database)
-                    </button>
-                </form>
-                
-                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                    <div class="option-card option-right" id="optionB">
+                        <div class="option-content">
+                            <div class="option-label">B</div>
+                            <div class="option-text"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </main>
+        </div>
+    </div>
 
+    <!-- Results Screen (Flower Garden) -->
+    <div id="resultsScreen" class="screen">
+        <div class="results-content">
+            <h2 class="results-title">🌸 Baby Prediction Garden 🌸</h2>
+            <div class="flower-garden" id="flowerGarden">
+                <div class="participant-count">
+                    <span id="participantCount">0</span> predictions so far!
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="supabase.js"></script>
-    <script src="script.js"></script>
+    <script src="quiz-script.js"></script>
 </body>
 </html>
