@@ -76,123 +76,42 @@ let answers = {};
 // Database instance
 let db;
 
-// Initialize the app
+// Simple initialization
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎯 Quiz app starting...');
+    console.log('App starting...');
     
-    // Setup event listeners first
-    setupEventListeners();
-    
-    // Initialize database later (non-blocking)
-    setTimeout(() => {
-        if (typeof SupabaseDB !== 'undefined') {
-            try {
-                db = new SupabaseDB();
-                console.log('✅ Database initialized');
-                loadExistingParticipants().catch(err => {
-                    console.error('⚠️ Error loading existing participants:', err);
-                });
-            } catch (error) {
-                console.error('❌ Database initialization failed:', error);
+    // Just setup the form listener
+    const nameForm = document.getElementById('nameForm');
+    if (nameForm) {
+        nameForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('playerName');
+            const name = nameInput.value.trim();
+            
+            if (name) {
+                console.log('Starting quiz for:', name);
+                playerName = name;
+                
+                // Go to quiz screen
+                document.getElementById('welcomeScreen').classList.remove('active');
+                document.getElementById('quizScreen').classList.add('active');
+                
+                // Load first question
+                loadQuestion(0);
             }
-        } else {
-            console.error('❌ SupabaseDB not found - continuing without database');
-        }
-    }, 100);
-    
-    console.log('🚀 Quiz app initialized successfully');
+        });
+    }
 });
 
-function setupEventListeners() {
-    console.log('🔗 Setting up event listeners...');
-    
-    // Name form submission with multiple fallbacks
-    const nameForm = document.getElementById('nameForm');
-    const startBtn = document.querySelector('.start-btn');
-    
-    if (nameForm) {
-        nameForm.addEventListener('submit', handleNameSubmit);
-        nameForm.onsubmit = handleNameSubmit; // Fallback
-        console.log('✅ Name form listener added');
-    } else {
-        console.error('❌ Name form not found!');
-    }
-    
-    if (startBtn) {
-        startBtn.addEventListener('click', (e) => {
-            console.log('🔘 Start button clicked');
-            handleNameSubmit(e);
-        });
-        console.log('✅ Start button listener added');
-    }
-    
-    // Option selection
-    const optionA = document.getElementById('optionA');
-    const optionB = document.getElementById('optionB');
-    
-    if (optionA) {
-        optionA.addEventListener('click', () => selectOption('A'));
-        console.log('✅ Option A listener added');
-    } else {
-        console.warn('⚠️ Option A not found (normal on load)');
-    }
-    
-    if (optionB) {
-        optionB.addEventListener('click', () => selectOption('B'));
-        console.log('✅ Option B listener added');
-    } else {
-        console.warn('⚠️ Option B not found (normal on load)');
-    }
-}
-
-function handleNameSubmit(e) {
-    console.log('🎯 Form submitted, preventing default...');
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const nameInput = document.getElementById('playerName');
-    const name = nameInput.value.trim();
-    
-    if (!name) {
-        alert('Please enter your name!');
-        return false;
-    }
-    
-    console.log(`👋 Starting quiz for: ${name}`);
-    playerName = name;
-    
-    // Start the quiz immediately without database checks for now
-    console.log('🎯 Starting quiz...');
-    showScreen('quizScreen');
-    loadQuestion(0);
-    
-    return false; // Prevent any form submission
-}
-
-function showScreen(screenId) {
-    console.log(`🔄 Switching to screen: ${screenId}`);
-    
-    // Hide all screens
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-    
-    // Show target screen
-    const targetScreen = document.getElementById(screenId);
-    if (targetScreen) {
-        targetScreen.classList.add('active');
-        console.log(`✅ Screen ${screenId} is now active`);
-    } else {
-        console.error(`❌ Screen ${screenId} not found!`);
-    }
-}
 
 function loadQuestion(index) {
-    console.log(`📝 Loading question ${index + 1} of ${questions.length}`);
+    console.log('Loading question', index + 1);
     
     if (index >= questions.length) {
-        console.log('🎉 Quiz completed, moving to results');
-        completeQuiz();
+        // Show results
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultsScreen').classList.add('active');
         return;
     }
     
@@ -200,18 +119,28 @@ function loadQuestion(index) {
     const question = questions[index];
     
     // Update progress
-    updateProgress();
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        const percentage = ((index + 1) / questions.length) * 100;
+        progressFill.style.width = percentage + '%';
+    }
     
-    // Update question content with error checking
+    const currentSpan = document.getElementById('currentQuestion');
+    if (currentSpan) currentSpan.textContent = index + 1;
+    
+    // Update question
     const titleElement = document.getElementById('questionTitle');
+    if (titleElement) titleElement.textContent = question.title;
+    
     const optionAElement = document.querySelector('#optionA .option-text');
     const optionBElement = document.querySelector('#optionB .option-text');
     
-    if (titleElement) titleElement.textContent = question.title;
     if (optionAElement) optionAElement.innerHTML = question.optionA.text;
     if (optionBElement) optionBElement.innerHTML = question.optionB.text;
     
-    console.log(`✅ Question loaded: ${question.title}`);
+    // Add option click handlers
+    document.getElementById('optionA').onclick = () => selectOption('A');
+    document.getElementById('optionB').onclick = () => selectOption('B');
 }
 
 function updateProgress() {
@@ -238,30 +167,16 @@ function selectOption(option) {
     const question = questions[currentQuestionIndex];
     const selectedValue = option === 'A' ? question.optionA.value : question.optionB.value;
     
-    // Map question to database field
-    const questionTypeMap = {
-        0: 'due_date',      // When will baby arrive
-        1: 'weight',        // How much will baby weigh
-        2: 'middle_name',   // Middle name
-        3: 'birth_time',    // Time of day
-        4: 'eye_color',     // Eye color
-        5: 'hair_color'     // Hair amount
-    };
+    console.log('Selected:', option, selectedValue);
     
-    const questionType = questionTypeMap[currentQuestionIndex];
-    answers[questionType] = selectedValue;
+    // Store the answer
+    const questionTypes = ['due_date', 'weight', 'middle_name', 'birth_time', 'eye_color', 'hair_color'];
+    answers[questionTypes[currentQuestionIndex]] = selectedValue;
     
-    console.log(`✅ Selected ${option}: ${selectedValue} for ${questionType}`);
-    
-    // Add visual feedback
-    const optionCard = document.getElementById(option === 'A' ? 'optionA' : 'optionB');
-    optionCard.style.transform = 'scale(1.1)';
-    optionCard.style.boxShadow = '0 15px 35px rgba(0,0,0,0.3)';
-    
-    // Move to next question after a short delay
+    // Go to next question
     setTimeout(() => {
         loadQuestion(currentQuestionIndex + 1);
-    }, 800);
+    }, 500);
 }
 
 async function completeQuiz() {
