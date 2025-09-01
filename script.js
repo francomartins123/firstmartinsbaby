@@ -29,15 +29,9 @@ function handleEntryPage() {
         e.preventDefault();
         
         const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim().toLowerCase();
         
-        if (!name || !email) {
-            showError('Please fill in both name and email.');
-            return;
-        }
-        
-        if (!isValidEmail(email)) {
-            showError('Please enter a valid email address.');
+        if (!name) {
+            showError('Please enter your name.');
             return;
         }
         
@@ -46,33 +40,32 @@ function handleEntryPage() {
         hideError();
         
         try {
-            console.log('Form submission started for:', name, email);
+            console.log('Form submission started for:', name);
             
             // Check if Supabase client is ready
             if (!supabaseClient) {
                 throw new Error('Database connection not ready. Please refresh the page and try again.');
             }
             
-            // Check if email already exists
-            console.log('Checking if email exists...');
-            const emailExists = await db.checkEmailExists(email);
-            console.log('Email exists check result:', emailExists);
+            // Check if name already exists (using name as unique identifier now)
+            console.log('Checking if name exists...');
+            const nameExists = await db.checkNameExists(name);
+            console.log('Name exists check result:', nameExists);
             
-            if (emailExists) {
-                showError('This email has already been used. Each person can only participate once.');
+            if (nameExists) {
+                showError('This name has already been used. Each person can only participate once.');
                 form.classList.remove('loading');
                 return;
             }
             
             // Create participant
             console.log('Creating participant...');
-            const participant = await db.createParticipant(name, email);
+            const participant = await db.createParticipant(name);
             console.log('Participant created:', participant);
             
             // Store participant info for the guessing page
             sessionStorage.setItem('participantId', participant.id);
             sessionStorage.setItem('participantName', participant.name);
-            sessionStorage.setItem('participantEmail', participant.email);
             
             console.log('Redirecting to guessing page...');
             // Redirect to guessing page

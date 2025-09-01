@@ -17,29 +17,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Database helper functions
 const db = {
-    // Check if email already exists
-    async checkEmailExists(email) {
+    // Check if name already exists
+    async checkNameExists(name) {
         const { data, error } = await supabaseClient
             .from('participants')
             .select('id')
-            .eq('email', email.toLowerCase())
+            .eq('name', name.trim())
             .single();
         
         if (error && error.code !== 'PGRST116') {
-            console.error('Error checking email:', error);
+            console.error('Error checking name:', error);
             return false;
         }
         return !!data;
     },
 
     // Create new participant
-    async createParticipant(name, email) {
+    async createParticipant(name) {
         const { data, error } = await supabaseClient
             .from('participants')
             .insert([
                 { 
                     name: name.trim(), 
-                    email: email.toLowerCase().trim() 
+                    email: `${name.trim().replace(/\s+/g, '').toLowerCase()}@placeholder.com`
                 }
             ])
             .select()
