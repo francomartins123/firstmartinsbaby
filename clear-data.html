@@ -3,7 +3,6 @@
 <head>
     <title>Clear Database</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase.js"></script>
 </head>
 <body>
     <h1>Clear Database</h1>
@@ -16,9 +15,41 @@
             status.textContent = 'Clearing data...';
             
             try {
-                await db.clearAllData();
-                status.textContent = 'Data cleared successfully!';
+                // Use service role key for admin operations
+                const SUPABASE_URL = 'https://nldazeppgrqnzxpiicrw.supabase.co';
+                const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZGF6ZXBwZ3Jxbnp4cGlpY3J3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njc0MDU3MSwiZXhwIjoyMDcyMzE2NTcxfQ.CQ4fTNLJ0AXm_WXFJfSWfX8HHiW_AY4vKqp6CcdvPgA';
+                
+                const adminClient = supabase.createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+                    auth: {
+                        persistSession: false,
+                        autoRefreshToken: false,
+                        detectSessionInUrl: false
+                    }
+                });
+
+                // Delete all guesses first (to avoid foreign key constraints)
+                const { error: guessesError } = await adminClient
+                    .from('guesses')
+                    .delete()
+                    .neq('id', 'impossible-value-to-match-all');
+
+                if (guessesError) {
+                    throw new Error('Failed to clear guesses: ' + guessesError.message);
+                }
+
+                // Then delete all participants
+                const { error: participantsError } = await adminClient
+                    .from('participants')  
+                    .delete()
+                    .neq('id', 'impossible-value-to-match-all');
+
+                if (participantsError) {
+                    throw new Error('Failed to clear participants: ' + participantsError.message);
+                }
+
+                status.textContent = 'All data cleared successfully!';
                 status.style.color = 'green';
+                
             } catch (error) {
                 status.textContent = `Error: ${error.message}`;
                 status.style.color = 'red';
