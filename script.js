@@ -46,8 +46,18 @@ function handleEntryPage() {
         hideError();
         
         try {
+            console.log('Form submission started for:', name, email);
+            
+            // Check if Supabase client is ready
+            if (!supabaseClient) {
+                throw new Error('Database connection not ready. Please refresh the page and try again.');
+            }
+            
             // Check if email already exists
+            console.log('Checking if email exists...');
             const emailExists = await db.checkEmailExists(email);
+            console.log('Email exists check result:', emailExists);
+            
             if (emailExists) {
                 showError('This email has already been used. Each person can only participate once.');
                 form.classList.remove('loading');
@@ -55,19 +65,22 @@ function handleEntryPage() {
             }
             
             // Create participant
+            console.log('Creating participant...');
             const participant = await db.createParticipant(name, email);
+            console.log('Participant created:', participant);
             
             // Store participant info for the guessing page
             sessionStorage.setItem('participantId', participant.id);
             sessionStorage.setItem('participantName', participant.name);
             sessionStorage.setItem('participantEmail', participant.email);
             
+            console.log('Redirecting to guessing page...');
             // Redirect to guessing page
             window.location.href = 'guessing.html';
             
         } catch (error) {
-            console.error('Error creating participant:', error);
-            showError('Something went wrong. Please try again.');
+            console.error('Error in form submission:', error);
+            showError(error.message || 'Something went wrong. Please try again.');
             form.classList.remove('loading');
         }
     });

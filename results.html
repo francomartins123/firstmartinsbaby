@@ -13,7 +13,7 @@
 <body>
     <div class="results-container">
         <header class="results-header">
-            <h1 class="baby-title">🌸 Family Predictions Garden 🌸</h1>
+            <h1 class="baby-title">✨ Family Prediction Stickers ✨</h1>
             <p class="results-subtitle">
                 <span id="participantCount">0</span> family members have shared their predictions!
             </p>
@@ -21,12 +21,15 @@
 
         <main class="results-main">
             <div class="garden-instructions">
-                <p>Each flower represents a family member's predictions. Click on any flower to see their guesses! 🌺</p>
+                <p>Click anywhere in the garden to reveal family predictions! ✨</p>
+                <div class="click-counter">
+                    <span id="revealedCount">0</span> of <span id="totalCount">0</span> predictions revealed
+                </div>
             </div>
             
-            <div id="resultsContainer" class="flower-garden">
+            <div id="resultsContainer" class="prediction-garden">
                 <div class="loading-garden">
-                    <div class="garden-loader">🌱 Growing the garden...</div>
+                    <div class="garden-loader">🌱 Loading predictions...</div>
                 </div>
             </div>
         </main>
