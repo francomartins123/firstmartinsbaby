@@ -117,27 +117,29 @@ body {
     outline: none;
     font-family: 'Fredoka', cursive;
     text-align: center;
-    background: transparent;
+    background: rgba(255, 182, 193, 0.9);
     width: 240px;
     height: 40px;
     color: #333;
     font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .name-form input::placeholder {
-    color: transparent;
+    color: #666;
+    font-size: 0.85rem;
 }
 
 .name-form input:focus {
-    background: rgba(255, 182, 193, 0.2);
+    background: rgba(255, 182, 193, 1);
     outline: 2px solid rgba(255, 105, 180, 0.5);
 }
 
 .start-btn {
     padding: 0.7rem 1rem;
     font-size: 0.9rem;
-    background: transparent;
-    color: transparent;
+    background: rgba(255, 105, 180, 0.9);
+    color: white;
     border: none;
     border-radius: 25px;
     font-family: 'Fredoka', cursive;
@@ -146,10 +148,13 @@ body {
     transition: all 0.3s ease;
     width: 240px;
     height: 40px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .start-btn:hover {
-    background: rgba(255, 105, 180, 0.1);
+    background: rgba(255, 105, 180, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 /* === QUIZ SCREEN === */
