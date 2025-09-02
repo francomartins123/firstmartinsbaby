@@ -78,6 +78,15 @@ document.addEventListener('DOMContentLoaded', function() {
             showGardenOnly();
         });
     }
+    
+    // Setup back to home button
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
+    if (backToHomeBtn) {
+        backToHomeBtn.addEventListener('click', function() {
+            console.log('Going back to home');
+            goBackToHome();
+        });
+    }
 });
 
 function startQuiz() {
@@ -586,26 +595,44 @@ function createFlower(participant, index) {
     return flower;
 }
 
-// Smart positioning to avoid overlaps
+// Smart positioning to avoid overlaps with responsive sizing
 function getFlowerPosition(index) {
-    const flowerWidth = 450; // Flower width in pixels
-    const flowerHeight = 340; // Flower height in pixels
     const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
     
-    // Calculate how many flowers can fit per row
-    const flowersPerRow = Math.floor(screenWidth / flowerWidth);
+    // Responsive flower dimensions based on screen size
+    let flowerWidth, flowerHeight, rowSpacing;
+    
+    if (screenWidth <= 480) {
+        // Small mobile
+        flowerWidth = 100;
+        flowerHeight = 130;
+        rowSpacing = 25;
+    } else if (screenWidth <= 768) {
+        // Tablet/large mobile
+        flowerWidth = 140;
+        flowerHeight = 180;
+        rowSpacing = 30;
+    } else {
+        // Desktop
+        flowerWidth = 450;
+        flowerHeight = 340;
+        rowSpacing = 45; // Increased spacing for desktop
+    }
+    
+    // Calculate how many flowers can fit per row (with more conservative spacing)
+    const flowersPerRow = Math.max(1, Math.floor((screenWidth * 0.85) / flowerWidth));
     
     // Calculate row and column for this flower
     const row = Math.floor(index / flowersPerRow);
     const col = index % flowersPerRow;
     
-    // Calculate position with some randomness but avoid overlaps
-    const baseX = (col * (100 / flowersPerRow)) + (Math.random() * 10 - 5);
-    const baseY = 20 + (row * 35) + (Math.random() * 10 - 5); // Start at 20%, then space rows
+    // Calculate position with minimal randomness to prevent overlaps
+    const spacing = 100 / flowersPerRow;
+    const baseX = (col * spacing) + (spacing * 0.1); // 10% padding from edges
+    const baseY = 15 + (row * rowSpacing) + (Math.random() * 4 - 2); // Less randomness
     
-    // Ensure we don't go off screen
-    const x = Math.max(5, Math.min(95, baseX));
+    // Ensure proper spacing and no overlap
+    const x = Math.max(2, Math.min(100 - spacing, baseX));
     const y = Math.max(10, baseY);
     
     return { x, y };
@@ -695,4 +722,24 @@ async function showGardenOnly() {
     } catch (error) {
         console.error('Error loading garden view:', error);
     }
+}
+
+// Go back to home page
+function goBackToHome() {
+    // Hide results screen and show welcome screen
+    document.getElementById('resultsScreen').classList.remove('active');
+    document.getElementById('welcomeScreen').classList.add('active');
+    
+    // Reset any quiz state if needed
+    currentQuestionIndex = 0;
+    answers = {};
+    playerName = '';
+    
+    // Clear the name input
+    const nameInput = document.getElementById('playerName');
+    if (nameInput) {
+        nameInput.value = '';
+    }
+    
+    console.log('Returned to home screen');
 }

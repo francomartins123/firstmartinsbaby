@@ -321,6 +321,30 @@ body {
     font-family: 'Fredoka', cursive;
 }
 
+.back-to-home-btn {
+    background: linear-gradient(45deg, #4A90E2, #64B5F6);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-to-home-btn:hover {
+    background: linear-gradient(45deg, #3F51B5, #4A90E2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(74, 144, 226, 0.6);
+}
+
 .flower-garden {
     position: relative;
     min-height: 100vh;
@@ -833,13 +857,40 @@ body {
     }
     
     .flower {
-        width: 200px;
-        height: 260px;
+        width: 140px;
+        height: 180px;
     }
     
     .flower-petal {
-        width: 80px;
-        height: 48px;
+        width: 60px;
+        height: 36px;
+    }
+    
+    /* Adjusted petal positions for tablet */
+    .flower-petal:nth-child(1) { top: -30px; left: 40px; }
+    .flower-petal:nth-child(2) { top: 0px; left: 80px; }
+    .flower-petal:nth-child(3) { top: 40px; left: 80px; }
+    .flower-petal:nth-child(4) { top: 60px; left: 40px; }
+    .flower-petal:nth-child(5) { top: 40px; left: 0px; }
+    .flower-petal:nth-child(6) { top: 0px; left: 0px; }
+    
+    .flower-center {
+        width: 35px;
+        height: 35px;
+        top: 15px;
+        left: 52px;
+    }
+    
+    .flower-stem {
+        height: 80px;
+        top: 50px;
+        left: 66px;
+    }
+    
+    .flower-pot {
+        width: 60px;
+        height: 40px;
+        left: 40px;
     }
     
     .name-form input,
@@ -883,21 +934,53 @@ body {
     }
     
     .flower {
-        width: 150px;
-        height: 200px;
+        width: 100px;
+        height: 130px;
     }
     
     .flower-petal {
-        width: 60px;
-        height: 36px;
+        width: 40px;
+        height: 24px;
+    }
+    
+    /* Compact petal positions for mobile */
+    .flower-petal:nth-child(1) { top: -20px; left: 30px; }
+    .flower-petal:nth-child(2) { top: -2px; left: 55px; }
+    .flower-petal:nth-child(3) { top: 25px; left: 55px; }
+    .flower-petal:nth-child(4) { top: 40px; left: 30px; }
+    .flower-petal:nth-child(5) { top: 25px; left: 5px; }
+    .flower-petal:nth-child(6) { top: -2px; left: 5px; }
+    
+    .flower-center {
+        width: 25px;
+        height: 25px;
+        top: 12px;
+        left: 37px;
+    }
+    
+    .flower-stem {
+        height: 50px;
+        top: 37px;
+        left: 46px;
+        width: 6px;
+    }
+    
+    .flower-pot {
+        width: 45px;
+        height: 30px;
+        left: 27px;
     }
     
     .petal-label {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
     }
     
     .petal-value {
-        font-size: 0.65rem;
+        font-size: 0.55rem;
+    }
+    
+    .pot-text {
+        font-size: 0.6rem;
     }
     
     .name-form input,
