@@ -82,7 +82,7 @@ body {
     max-width: 400px;
     padding: 0;
     position: absolute;
-    top: 65%;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
@@ -104,55 +104,52 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
     margin-top: 0;
     position: relative;
 }
 
 .name-form input {
-    padding: 0.8rem 1.2rem;
-    font-size: 1rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
     border: none;
-    border-radius: 50px;
+    border-radius: 25px;
     outline: none;
     font-family: 'Fredoka', cursive;
     text-align: center;
-    background: rgba(255, 182, 193, 0.95);
-    width: 280px;
+    background: transparent;
+    width: 240px;
+    height: 40px;
     color: #333;
     font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .name-form input::placeholder {
-    color: #666;
-    font-size: 0.95rem;
+    color: transparent;
 }
 
 .name-form input:focus {
-    background: rgba(255, 182, 193, 1);
-    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.3);
+    background: rgba(255, 182, 193, 0.2);
+    outline: 2px solid rgba(255, 105, 180, 0.5);
 }
 
 .start-btn {
-    padding: 0.8rem 1.5rem;
-    font-size: 0.95rem;
-    background: rgba(255, 105, 180, 0.95);
-    color: white;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    background: transparent;
+    color: transparent;
     border: none;
-    border-radius: 50px;
+    border-radius: 25px;
     font-family: 'Fredoka', cursive;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 280px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 240px;
+    height: 40px;
 }
 
 .start-btn:hover {
-    background: rgba(255, 105, 180, 1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    background: rgba(255, 105, 180, 0.1);
 }
 
 /* === QUIZ SCREEN === */
