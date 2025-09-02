@@ -124,6 +124,30 @@ const db = {
         return subscription;
     },
 
+    // Create a single guess (legacy compatibility)
+    async createGuess(participantId, questionType, guessValue) {
+        const { data, error } = await supabaseClient
+            .from('guesses')
+            .insert([{
+                participant_id: participantId,
+                question_type: questionType,
+                guess_value: String(guessValue)
+            }])
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Error creating guess:', error);
+            throw error;
+        }
+        return data;
+    },
+
+    // Get all participants (legacy compatibility)
+    async getAllParticipants() {
+        return this.getAllParticipantsWithGuesses();
+    },
+
     // Clear all data from tables
     async clearAllData() {
         // First delete all guesses

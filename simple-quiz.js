@@ -49,6 +49,9 @@ let answers = {};
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Simple quiz starting...');
     
+    // Load existing flowers on page load
+    loadExistingFlowers();
+    
     // Setup name form
     const form = document.getElementById('nameForm');
     if (form) {
@@ -64,6 +67,15 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 alert('Please enter your name!');
             }
+        });
+    }
+    
+    // Setup view garden button
+    const viewGardenBtn = document.getElementById('viewGardenBtn');
+    if (viewGardenBtn) {
+        viewGardenBtn.addEventListener('click', function() {
+            console.log('Showing garden view');
+            showGardenOnly();
         });
     }
 });
@@ -393,62 +405,43 @@ function finishQuiz() {
 async function saveAndShowResults() {
     console.log('Saving results and showing flower garden');
     
-    // Show results first, then try to save in background
-    showFlowerGarden();
-    
-    // Try to save data in background
-    setTimeout(async () => {
-        try {
+    try {
+        // Check if we can save data to database
+        if (typeof db !== 'undefined' && db.createParticipant) {
             console.log('Attempting to save data to database...');
             
-            // Dynamically load Supabase only when needed
-            if (!window.supabaseLoaded) {
-                console.log('Loading Supabase...');
-                const script = document.createElement('script');
-                script.src = 'supabase.js';
-                document.head.appendChild(script);
-                
-                await new Promise(resolve => {
-                    script.onload = resolve;
-                    script.onerror = () => {
-                        console.error('Failed to load supabase.js');
-                        resolve();
-                    };
-                });
-                
-                window.supabaseLoaded = true;
+            // Check if name already exists
+            const nameExists = await db.checkNameExists(playerName);
+            if (nameExists) {
+                console.log('Name already exists, showing offline garden');
+                showFlowerGarden();
+                return;
             }
             
-            if (typeof SupabaseDB !== 'undefined') {
-                console.log('Supabase loaded, creating database instance...');
-                const db = new SupabaseDB();
-                
-                // Create participant
-                console.log('Creating participant:', playerName);
-                const participant = await db.createParticipant(playerName);
-                console.log('Participant created:', participant);
-                
-                // Save all answers
-                console.log('Saving answers:', answers);
-                for (const [type, value] of Object.entries(answers)) {
-                    await db.createGuess(participant.id, type, value);
-                    console.log('Saved guess:', type, value);
-                }
-                
-                console.log('All data saved successfully!');
-                
-                // Refresh flower garden with all participants
-                console.log('Loading all participants for flower garden...');
-                const participants = await db.getAllParticipants();
-                console.log('Found participants:', participants.length);
-                displayFlowers(participants);
-            } else {
-                console.error('SupabaseDB not available after loading');
-            }
-        } catch (error) {
-            console.error('Error saving data:', error);
+            // Create participant
+            console.log('Creating participant:', playerName);
+            const participant = await db.createParticipant(playerName);
+            console.log('Participant created:', participant);
+            
+            // Save all answers using the new saveGuesses method
+            console.log('Saving answers:', answers);
+            await db.saveGuesses(participant.id, answers);
+            console.log('All data saved successfully!');
+            
+            // Load and display all participants
+            console.log('Loading all participants for flower garden...');
+            const participants = await db.getAllParticipantsWithGuesses();
+            console.log('Found participants:', participants.length);
+            displayFlowers(participants);
+        } else {
+            console.log('Database not available, showing offline garden');
+            showFlowerGarden();
         }
-    }, 1000);
+    } catch (error) {
+        console.error('Error saving data:', error);
+        // Fallback to offline mode
+        showFlowerGarden();
+    }
 }
 
 function showFlowerGarden() {
@@ -553,4 +546,84 @@ function formatDate(dateString) {
     if (!dateString) return 'TBD';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// Load existing flowers on page load
+async function loadExistingFlowers() {
+    try {
+        // Wait for database to be available
+        await waitForDatabase();
+        
+        if (typeof db !== 'undefined' && db.getAllParticipantsWithGuesses) {
+            console.log('Loading existing flowers from database...');
+            const participants = await db.getAllParticipantsWithGuesses();
+            
+            if (participants && participants.length > 0) {
+                console.log('Found', participants.length, 'existing participants');
+                displayFlowers(participants);
+            } else {
+                console.log('No existing participants found');
+            }
+        } else {
+            console.log('Database not available for loading flowers');
+        }
+    } catch (error) {
+        console.error('Error loading existing flowers:', error);
+    }
+}
+
+// Helper function to wait for database to be ready
+async function waitForDatabase() {
+    return new Promise((resolve) => {
+        const checkDatabase = () => {
+            if (typeof db !== 'undefined' && db.getAllParticipantsWithGuesses) {
+                resolve();
+            } else {
+                setTimeout(checkDatabase, 100);
+            }
+        };
+        
+        // Start checking immediately, but also timeout after 5 seconds
+        checkDatabase();
+        setTimeout(resolve, 5000);
+    });
+}
+
+// Show garden view only (for viewing existing flowers)
+async function showGardenOnly() {
+    // Hide welcome screen and show results screen
+    document.getElementById('welcomeScreen').classList.remove('active');
+    document.getElementById('resultsScreen').classList.add('active');
+    
+    try {
+        // Wait for database and load participants
+        await waitForDatabase();
+        
+        if (typeof db !== 'undefined' && db.getAllParticipantsWithGuesses) {
+            console.log('Loading participants for garden view...');
+            const participants = await db.getAllParticipantsWithGuesses();
+            
+            if (participants && participants.length > 0) {
+                console.log('Displaying', participants.length, 'flowers in garden');
+                displayFlowers(participants);
+            } else {
+                console.log('No participants found for garden');
+                // Show empty garden message
+                const garden = document.getElementById('flowerGarden');
+                garden.innerHTML = `
+                    <div class="participant-count">
+                        <span id="participantCount">0</span> predictions so far!
+                    </div>
+                    <div class="empty-garden-message">
+                        <p>🌱 The prediction garden is empty!</p>
+                        <p>Be the first to plant your flower predictions!</p>
+                    </div>
+                `;
+            }
+        } else {
+            console.log('Database not available for garden view');
+        }
+    } catch (error) {
+        console.error('Error loading garden view:', error);
+    }
 }
