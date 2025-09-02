@@ -294,24 +294,10 @@ function createFlower(participant, index) {
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
     
-    // HARDCODED FIX: Direct mapping to ensure correct dates are shown
-    const correctDates = {
-        '2025-10-03': 'Oct 3',
-        '2025-10-19': 'Oct 19',
-        // Also handle potential converted dates
-        '2025-10-02': 'Oct 3', // Fix off-by-one conversion
-        '2025-10-18': 'Oct 19' // Fix off-by-one conversion
-    };
-    
     const dateStr = String(dateString).trim();
     let datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
     
-    // Check if we have a direct mapping first
-    if (correctDates[datePart]) {
-        return correctDates[datePart];
-    }
-    
-    // Fallback to normal parsing
+    // Parse the date components directly from the YYYY-MM-DD string
     const parts = datePart.split('-');
     if (parts.length !== 3) return 'Invalid Date';
     
