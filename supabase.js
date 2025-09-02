@@ -102,17 +102,16 @@ const db = {
             throw participantsError;
         }
 
-        // Fix date timezone conversion issue
+        // Format dates for display without timezone conversion
         participants.forEach(participant => {
             participant.guesses.forEach(guess => {
                 if (guess.question_type === 'due_date' && guess.guess_value) {
-                    // Add one day to correct the timezone conversion
+                    // Format the exact database date without adding days
                     const dateStr = String(guess.guess_value).split('T')[0];
-                    const date = new Date(dateStr + 'T12:00:00');
-                    date.setDate(date.getDate() + 1);
+                    const [year, month, day] = dateStr.split('-').map(Number);
                     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    guess.guess_value = months[date.getMonth()] + ' ' + date.getDate();
+                    guess.guess_value = months[month - 1] + ' ' + day;
                 }
             });
         });
