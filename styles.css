@@ -314,8 +314,8 @@ body {
 /* === FLOWER STYLES === */
 .flower {
     position: absolute;
-    width: 250px;
-    height: 320px;
+    width: 350px;
+    height: 380px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -341,13 +341,13 @@ body {
     border: 2px solid rgba(255,255,255,0.3);
 }
 
-/* Positioned in a clean flower pattern around the center */
-.flower-petal:nth-child(1) { top: -15px; left: 50px; transform: rotate(0deg); }
-.flower-petal:nth-child(2) { top: 5px; left: 85px; transform: rotate(60deg); }
-.flower-petal:nth-child(3) { top: 50px; left: 85px; transform: rotate(120deg); }
-.flower-petal:nth-child(4) { top: 75px; left: 50px; transform: rotate(180deg); }
-.flower-petal:nth-child(5) { top: 50px; left: 15px; transform: rotate(240deg); }
-.flower-petal:nth-child(6) { top: 5px; left: 15px; transform: rotate(300deg); }
+/* Positioned with large spacing to prevent overlap */
+.flower-petal:nth-child(1) { top: -40px; left: 50px; transform: rotate(0deg); }
+.flower-petal:nth-child(2) { top: -10px; left: 120px; transform: rotate(60deg); }
+.flower-petal:nth-child(3) { top: 70px; left: 120px; transform: rotate(120deg); }
+.flower-petal:nth-child(4) { top: 110px; left: 50px; transform: rotate(180deg); }
+.flower-petal:nth-child(5) { top: 70px; left: -20px; transform: rotate(240deg); }
+.flower-petal:nth-child(6) { top: -10px; left: -20px; transform: rotate(300deg); }
 
 .petal-label {
     font-size: 0.65rem;
@@ -369,7 +369,7 @@ body {
 
 .flower-center {
     position: absolute;
-    top: 30px;
+    top: 35px;
     left: 75px;
     width: 50px;
     height: 50px;
@@ -382,10 +382,10 @@ body {
 
 .flower-stem {
     position: absolute;
-    top: 80px;
+    top: 85px;
     left: 96px;
     width: 8px;
-    height: 80px;
+    height: 90px;
     background: #4CAF50;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
