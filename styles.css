@@ -22,7 +22,7 @@ body {
 
 /* Welcome screen specific background */
 #welcomeScreen {
-    background: url('welcome-bg.png') center center / contain no-repeat !important;
+    background: url('new background.jpg') center center / contain no-repeat !important;
     background-color: #87CEEB !important; /* Light blue sides */
 }
 
