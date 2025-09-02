@@ -13,32 +13,21 @@ body {
     overflow-x: hidden;
 }
 
-/* === SKY BACKGROUND === */
+/* === BACKGROUND STYLES === */
 .sky-background {
-    background: linear-gradient(180deg, 
-        #87CEEB 0%,     /* Sky blue */
-        #98E4FF 25%,    /* Light blue */
-        #FFB6C1 60%,    /* Light pink */
-        #FFA07A 85%,    /* Light salmon */
-        #FF6B9D 100%    /* Pink */
-    );
+    background: url('quiz-bg.png') center center / cover no-repeat;
     position: relative;
+    min-height: 100vh;
 }
 
-.sky-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 15%, transparent 15%),
-        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.4) 20%, transparent 20%),
-        radial-gradient(circle at 40% 70%, rgba(255,255,255,0.5) 18%, transparent 18%),
-        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.3) 25%, transparent 25%);
-    pointer-events: none;
-    z-index: -1;
+/* Welcome screen specific background */
+#welcomeScreen {
+    background: url('welcome-bg.png') center center / cover no-repeat !important;
+}
+
+/* Fallback for unsupported browsers */
+.sky-background {
+    background-color: #87CEEB;
 }
 
 /* === DECORATIVE ELEMENTS === */
@@ -91,84 +80,84 @@ body {
     text-align: center;
     max-width: 800px;
     padding: 2rem;
-    /* Remove white background box */
+    position: relative;
+    z-index: 10;
+}
+
+/* Hide decorative elements on welcome screen since background has them */
+#welcomeScreen .decoration {
+    display: none;
 }
 
 .due-date {
-    font-size: 1.3rem;
-    color: #000;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    font-family: 'Fredoka', cursive;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    display: none; /* Remove due date from main page to match design */
 }
 
 .main-title {
-    font-size: 6rem;
+    font-size: 5rem;
     font-weight: 900;
     font-family: 'Fredoka', cursive;
-    color: #FFB6C1;
+    color: #FF69B4;
     text-shadow: 
-        4px 4px 0px #000000,
-        8px 8px 0px #4A90E2,
-        12px 12px 0px #FF69B4;
-    margin-bottom: 1rem;
-    letter-spacing: 3px;
-    line-height: 1.1;
+        3px 3px 0px #FFFFFF,
+        6px 6px 0px #87CEEB;
+    margin-bottom: 3rem;
+    letter-spacing: 2px;
+    line-height: 0.9;
     text-transform: uppercase;
 }
 
 .welcome-subtitle {
-    font-size: 1.4rem;
-    color: #000;
-    margin-bottom: 2rem;
-    font-weight: 500;
-    font-family: 'Fredoka', cursive;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    display: none; /* Remove subtitle to match exact design */
 }
 
 .name-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
 }
 
 .name-form input {
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    border: 3px solid #FF6B9D;
+    padding: 1.2rem 2rem;
+    font-size: 1.3rem;
+    border: 3px solid #FF69B4;
     border-radius: 50px;
     outline: none;
     font-family: 'Fredoka', cursive;
     text-align: center;
-    background: white;
-    min-width: 300px;
+    background: rgba(255,255,255,0.95);
+    min-width: 320px;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
 }
 
 .name-form input:focus {
-    border-color: #4A90E2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+    border-color: #FF1493;
+    box-shadow: 0 0 0 4px rgba(255, 20, 147, 0.2);
 }
 
 .start-btn {
-    padding: 1rem 2rem;
-    font-size: 1.3rem;
-    background: linear-gradient(45deg, #FF6B9D, #FFB347);
+    padding: 1.2rem 3rem;
+    font-size: 1.1rem;
+    background: #FF69B4;
     color: white;
-    border: none;
+    border: 3px solid white;
     border-radius: 50px;
     font-family: 'Fredoka', cursive;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .start-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
+    background: #FF1493;
 }
 
 /* === QUIZ SCREEN === */
@@ -696,19 +685,22 @@ body {
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
     .main-title {
-        font-size: 3.5rem;
+        font-size: 3rem;
         text-shadow: 
-            3px 3px 0px #000000,
-            6px 6px 0px #4A90E2,
-            9px 9px 0px #FF69B4;
+            2px 2px 0px #FFFFFF,
+            4px 4px 0px #87CEEB;
+        margin-bottom: 2rem;
     }
     
-    .welcome-subtitle {
-        font-size: 1.2rem;
-    }
-    
-    .due-date {
+    .name-form input {
+        min-width: 280px;
         font-size: 1.1rem;
+        padding: 1rem 1.5rem;
+    }
+    
+    .start-btn {
+        font-size: 1rem;
+        padding: 1rem 2rem;
     }
     
     .options-container {
@@ -725,17 +717,82 @@ body {
         font-size: 2rem;
     }
     
-    .decoration {
-        font-size: 1.5rem;
+    .calendar-day {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+    
+    .time-scrollers {
+        gap: 1rem;
+    }
+    
+    .time-select {
+        width: 80px;
+        font-size: 1.1rem;
+        padding: 0.8rem;
+    }
+    
+    .flower {
+        width: 160px;
+        height: 220px;
+    }
+    
+    .flower-petal {
+        width: 70px;
+        height: 40px;
     }
 }
 
 @media (max-width: 480px) {
     .main-title {
-        font-size: 2.8rem;
+        font-size: 2.2rem;
+        line-height: 0.8;
     }
     
     .welcome-content {
         padding: 1rem;
+    }
+    
+    .name-form input {
+        min-width: 260px;
+        font-size: 1rem;
+    }
+    
+    .start-btn {
+        font-size: 0.9rem;
+        padding: 0.9rem 1.8rem;
+    }
+    
+    .question-title {
+        font-size: 1.6rem;
+    }
+    
+    .calendar-grid {
+        gap: 0.3rem;
+    }
+    
+    .calendar-day {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .flower {
+        width: 130px;
+        height: 180px;
+    }
+    
+    .flower-petal {
+        width: 55px;
+        height: 32px;
+    }
+    
+    .petal-label {
+        font-size: 0.5rem;
+    }
+    
+    .petal-value {
+        font-size: 0.65rem;
     }
 }
