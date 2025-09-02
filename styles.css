@@ -22,7 +22,8 @@ body {
 
 /* Welcome screen specific background */
 #welcomeScreen {
-    background: url('welcome-bg.png') center center / cover no-repeat !important;
+    background: url('welcome-bg.png') center center / contain no-repeat !important;
+    background-color: #87CEEB !important; /* Light blue sides */
 }
 
 /* Fallback for unsupported browsers */
@@ -78,10 +79,10 @@ body {
 /* === WELCOME SCREEN === */
 .welcome-content {
     text-align: center;
-    max-width: 500px;
+    max-width: 400px;
     padding: 0;
     position: absolute;
-    top: 50%;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
@@ -109,21 +110,23 @@ body {
 }
 
 .name-form input {
-    padding: 1rem 1.5rem;
-    font-size: 1.1rem;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
     border: none;
     border-radius: 50px;
     outline: none;
     font-family: 'Fredoka', cursive;
     text-align: center;
-    background: rgba(255, 182, 193, 0.9);
-    min-width: 280px;
+    background: rgba(255, 182, 193, 0.95);
+    width: 280px;
     color: #333;
     font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .name-form input::placeholder {
     color: #666;
+    font-size: 0.95rem;
 }
 
 .name-form input:focus {
@@ -132,9 +135,9 @@ body {
 }
 
 .start-btn {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    background: rgba(255, 105, 180, 0.9);
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+    background: rgba(255, 105, 180, 0.95);
     color: white;
     border: none;
     border-radius: 50px;
@@ -142,12 +145,14 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 280px;
+    width: 280px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .start-btn:hover {
     background: rgba(255, 105, 180, 1);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* === QUIZ SCREEN === */
@@ -332,13 +337,13 @@ body {
     border: 2px solid rgba(255,255,255,0.3);
 }
 
-/* More spaced out petal positions for better readability */
-.flower-petal:nth-child(1) { top: -15px; left: 75px; transform: rotate(0deg); }
-.flower-petal:nth-child(2) { top: 25px; left: 125px; transform: rotate(60deg); }
-.flower-petal:nth-child(3) { top: 90px; left: 125px; transform: rotate(120deg); }
-.flower-petal:nth-child(4) { top: 135px; left: 75px; transform: rotate(180deg); }
-.flower-petal:nth-child(5) { top: 90px; left: 25px; transform: rotate(240deg); }
-.flower-petal:nth-child(6) { top: 25px; left: 25px; transform: rotate(300deg); }
+/* Positioned so petal corners meet exactly without overlap */
+.flower-petal:nth-child(1) { top: -20px; left: 75px; transform: rotate(0deg); }
+.flower-petal:nth-child(2) { top: 15px; left: 110px; transform: rotate(60deg); }
+.flower-petal:nth-child(3) { top: 75px; left: 110px; transform: rotate(120deg); }
+.flower-petal:nth-child(4) { top: 110px; left: 75px; transform: rotate(180deg); }
+.flower-petal:nth-child(5) { top: 75px; left: 40px; transform: rotate(240deg); }
+.flower-petal:nth-child(6) { top: 15px; left: 40px; transform: rotate(300deg); }
 
 .petal-label {
     font-size: 0.65rem;
@@ -360,7 +365,7 @@ body {
 
 .flower-center {
     position: absolute;
-    top: 60px;
+    top: 45px;
     left: 100px;
     width: 50px;
     height: 50px;
@@ -368,11 +373,12 @@ body {
     border-radius: 50%;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 3px solid rgba(255,255,255,0.4);
+    z-index: 5;
 }
 
 .flower-stem {
     position: absolute;
-    top: 160px;
+    top: 140px;
     left: 120px;
     width: 8px;
     height: 100px;
