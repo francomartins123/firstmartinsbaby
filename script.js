@@ -278,7 +278,7 @@ function createFlower(participant, index) {
     }
     
     const petalData = [
-        { label: 'Due', value: formatDate(dueDateValue) },
+        { label: 'Due', value: dueDateValue },
         { label: 'Weight', value: `${guessesObj.weight} lbs` },
         { label: 'Name', value: guessesObj.middle_name },
         { label: 'Time', value: guessesObj.birth_time },
