@@ -406,6 +406,7 @@ body {
     padding: 0.4rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 2px solid rgba(255,255,255,0.3);
+    z-index: 5;
 }
 
 /* Positioned with maximum spacing to prevent any overlap */
