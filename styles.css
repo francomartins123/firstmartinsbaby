@@ -78,10 +78,20 @@ body {
 /* === WELCOME SCREEN === */
 .welcome-content {
     text-align: center;
-    max-width: 800px;
-    padding: 2rem;
-    position: relative;
+    max-width: 500px;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 10;
+}
+
+/* Hide all text elements - background image has the text */
+.due-date,
+.main-title,
+.welcome-subtitle {
+    display: none;
 }
 
 /* Hide decorative elements on welcome screen since background has them */
@@ -89,75 +99,55 @@ body {
     display: none;
 }
 
-.due-date {
-    display: none; /* Remove due date from main page to match design */
-}
-
-.main-title {
-    font-size: 5rem;
-    font-weight: 900;
-    font-family: 'Fredoka', cursive;
-    color: #FF69B4;
-    text-shadow: 
-        3px 3px 0px #FFFFFF,
-        6px 6px 0px #87CEEB;
-    margin-bottom: 3rem;
-    letter-spacing: 2px;
-    line-height: 0.9;
-    text-transform: uppercase;
-}
-
-.welcome-subtitle {
-    display: none; /* Remove subtitle to match exact design */
-}
-
 .name-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    margin-top: 0;
+    position: relative;
 }
 
 .name-form input {
-    padding: 1.2rem 2rem;
-    font-size: 1.3rem;
-    border: 3px solid #FF69B4;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border: none;
     border-radius: 50px;
     outline: none;
     font-family: 'Fredoka', cursive;
     text-align: center;
-    background: rgba(255,255,255,0.95);
-    min-width: 320px;
-    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+    background: rgba(255, 182, 193, 0.9);
+    min-width: 280px;
+    color: #333;
+    font-weight: 500;
+}
+
+.name-form input::placeholder {
+    color: #666;
 }
 
 .name-form input:focus {
-    border-color: #FF1493;
-    box-shadow: 0 0 0 4px rgba(255, 20, 147, 0.2);
+    background: rgba(255, 182, 193, 1);
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.3);
 }
 
 .start-btn {
-    padding: 1.2rem 3rem;
-    font-size: 1.1rem;
-    background: #FF69B4;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    background: rgba(255, 105, 180, 0.9);
     color: white;
-    border: 3px solid white;
+    border: none;
     border-radius: 50px;
     font-family: 'Fredoka', cursive;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    min-width: 280px;
 }
 
 .start-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
-    background: #FF1493;
+    background: rgba(255, 105, 180, 1);
+    transform: translateY(-2px);
 }
 
 /* === QUIZ SCREEN === */
@@ -315,8 +305,8 @@ body {
 /* === FLOWER STYLES === */
 .flower {
     position: absolute;
-    width: 200px;
-    height: 260px;
+    width: 250px;
+    height: 320px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -327,8 +317,8 @@ body {
 
 .flower-petal {
     position: absolute;
-    width: 85px;
-    height: 50px;
+    width: 100px;
+    height: 60px;
     background: linear-gradient(45deg, #FF6B9D, #FFB347);
     border-radius: 50px 50px 50px 10px;
     display: flex;
@@ -337,59 +327,64 @@ body {
     justify-content: center;
     color: white;
     text-align: center;
-    padding: 0.3rem;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    padding: 0.4rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.3);
 }
 
-/* Updated petal positions for larger flower */
-.flower-petal:nth-child(1) { top: -10px; left: 57px; transform: rotate(0deg); }
-.flower-petal:nth-child(2) { top: 20px; left: 95px; transform: rotate(60deg); }
-.flower-petal:nth-child(3) { top: 70px; left: 95px; transform: rotate(120deg); }
-.flower-petal:nth-child(4) { top: 110px; left: 57px; transform: rotate(180deg); }
-.flower-petal:nth-child(5) { top: 70px; left: 20px; transform: rotate(240deg); }
-.flower-petal:nth-child(6) { top: 20px; left: 20px; transform: rotate(300deg); }
+/* More spaced out petal positions for better readability */
+.flower-petal:nth-child(1) { top: -15px; left: 75px; transform: rotate(0deg); }
+.flower-petal:nth-child(2) { top: 25px; left: 125px; transform: rotate(60deg); }
+.flower-petal:nth-child(3) { top: 90px; left: 125px; transform: rotate(120deg); }
+.flower-petal:nth-child(4) { top: 135px; left: 75px; transform: rotate(180deg); }
+.flower-petal:nth-child(5) { top: 90px; left: 25px; transform: rotate(240deg); }
+.flower-petal:nth-child(6) { top: 25px; left: 25px; transform: rotate(300deg); }
 
 .petal-label {
-    font-size: 0.6rem;
-    font-weight: 500;
-    opacity: 0.8;
+    font-size: 0.65rem;
+    font-weight: 600;
+    opacity: 0.9;
     line-height: 1;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.15rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .petal-value {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
     line-height: 1.1;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .flower-center {
     position: absolute;
-    top: 50px;
-    left: 75px;
-    width: 40px;
-    height: 40px;
+    top: 60px;
+    left: 100px;
+    width: 50px;
+    height: 50px;
     background: #FFD700;
     border-radius: 50%;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 3px solid rgba(255,255,255,0.4);
 }
 
 .flower-stem {
     position: absolute;
-    top: 130px;
-    left: 93px;
-    width: 6px;
-    height: 80px;
+    top: 160px;
+    left: 120px;
+    width: 8px;
+    height: 100px;
     background: #4CAF50;
-    border-radius: 3px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .flower-pot {
     position: absolute;
     bottom: 0;
-    left: 50px;
+    left: 75px;
     width: 100px;
     height: 60px;
     background: linear-gradient(45deg, #8D6E63, #A1887F);
@@ -397,7 +392,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.2);
 }
 
 .pot-text {
@@ -405,6 +401,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
 }
 
 /* === NEW QUESTION STYLES === */
@@ -734,13 +731,18 @@ body {
     }
     
     .flower {
-        width: 160px;
-        height: 220px;
+        width: 200px;
+        height: 260px;
     }
     
     .flower-petal {
-        width: 70px;
-        height: 40px;
+        width: 80px;
+        height: 48px;
+    }
+    
+    .name-form input,
+    .start-btn {
+        min-width: 250px;
     }
 }
 
@@ -779,13 +781,13 @@ body {
     }
     
     .flower {
-        width: 130px;
-        height: 180px;
+        width: 150px;
+        height: 200px;
     }
     
     .flower-petal {
-        width: 55px;
-        height: 32px;
+        width: 60px;
+        height: 36px;
     }
     
     .petal-label {
@@ -794,5 +796,11 @@ body {
     
     .petal-value {
         font-size: 0.65rem;
+    }
+    
+    .name-form input,
+    .start-btn {
+        min-width: 220px;
+        font-size: 0.95rem;
     }
 }
