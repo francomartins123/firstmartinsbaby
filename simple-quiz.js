@@ -616,20 +616,20 @@ function getFlowerPosition(index) {
         // Desktop
         flowerWidth = 450;
         flowerHeight = 340;
-        rowSpacing = 45; // Increased spacing for desktop
+        rowSpacing = 65; // Much more spacing for desktop to prevent vertical overlap
     }
     
-    // Calculate how many flowers can fit per row (with more conservative spacing)
-    const flowersPerRow = Math.max(1, Math.floor((screenWidth * 0.85) / flowerWidth));
+    // Calculate how many flowers can fit per row (less conservative for garden feel)
+    const flowersPerRow = Math.max(1, Math.floor((screenWidth * 0.95) / flowerWidth));
     
     // Calculate row and column for this flower
     const row = Math.floor(index / flowersPerRow);
     const col = index % flowersPerRow;
     
-    // Calculate position with minimal randomness to prevent overlaps
+    // Calculate position with closer horizontal spacing for garden feel
     const spacing = 100 / flowersPerRow;
-    const baseX = (col * spacing) + (spacing * 0.1); // 10% padding from edges
-    const baseY = 15 + (row * rowSpacing) + (Math.random() * 4 - 2); // Less randomness
+    const baseX = (col * spacing) + (spacing * 0.05); // Smaller padding for closer flowers
+    const baseY = 15 + (row * rowSpacing) + (Math.random() * 3 - 1.5); // Very minimal randomness
     
     // Ensure proper spacing and no overlap
     const x = Math.max(2, Math.min(100 - spacing, baseX));
