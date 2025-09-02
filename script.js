@@ -251,6 +251,7 @@ function createFlower(participant, index) {
     // Convert guesses array to object
     const guessesObj = {};
     participant.guesses.forEach(guess => {
+        console.log(`Processing guess for ${participant.name}:`, guess.question_type, '=', guess.guess_value);
         guessesObj[guess.question_type] = guess.guess_value;
     });
     
