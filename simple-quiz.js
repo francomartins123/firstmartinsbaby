@@ -404,13 +404,19 @@ function finishQuiz() {
 
 async function saveAndShowResults() {
     console.log('Saving results and showing flower garden');
+    console.log('Current answers:', answers);
+    console.log('Player name:', playerName);
     
     try {
+        // Wait for database to be ready
+        await waitForDatabase();
+        
         // Check if we can save data to database
         if (typeof db !== 'undefined' && db.createParticipant) {
-            console.log('Attempting to save data to database...');
+            console.log('Database is available, attempting to save data...');
             
             // Check if name already exists
+            console.log('Checking if name exists...');
             const nameExists = await db.checkNameExists(playerName);
             if (nameExists) {
                 console.log('Name already exists, showing offline garden');
@@ -421,24 +427,29 @@ async function saveAndShowResults() {
             // Create participant
             console.log('Creating participant:', playerName);
             const participant = await db.createParticipant(playerName);
-            console.log('Participant created:', participant);
+            console.log('Participant created successfully:', participant);
             
             // Save all answers using the new saveGuesses method
-            console.log('Saving answers:', answers);
-            await db.saveGuesses(participant.id, answers);
-            console.log('All data saved successfully!');
+            console.log('Saving answers to database...', answers);
+            const savedGuesses = await db.saveGuesses(participant.id, answers);
+            console.log('All data saved successfully!', savedGuesses);
+            
+            // Small delay to ensure database is updated
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             // Load and display all participants
             console.log('Loading all participants for flower garden...');
             const participants = await db.getAllParticipantsWithGuesses();
-            console.log('Found participants:', participants.length);
+            console.log('Found participants for display:', participants);
             displayFlowers(participants);
         } else {
-            console.log('Database not available, showing offline garden');
+            console.log('Database not available after waiting, showing offline garden');
+            console.log('typeof db:', typeof db);
             showFlowerGarden();
         }
     } catch (error) {
         console.error('Error saving data:', error);
+        console.error('Error details:', error.message, error.stack);
         // Fallback to offline mode
         showFlowerGarden();
     }
@@ -515,9 +526,9 @@ function createFlower(participant, index) {
     
     // Create petals with labels and values
     const petals = [
-        { label: 'Due Date', value: formatDate(guesses.due_date) },
+        { label: 'Delivery Date', value: formatDate(guesses.due_date) },
         { label: 'Weight', value: `${guesses.weight} lbs` },
-        { label: 'Name', value: guesses.middle_name || 'TBD' },
+        { label: 'Middle Name', value: guesses.middle_name || 'TBD' },
         { label: 'Birth Time', value: guesses.birth_time || 'TBD' },
         { label: 'Eye Color', value: guesses.eye_color || 'TBD' },
         { label: 'Hair Color', value: guesses.hair_color || 'TBD' }
