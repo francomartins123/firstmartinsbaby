@@ -251,7 +251,17 @@ function createFlower(participant, index) {
     // Convert guesses array to object
     const guessesObj = {};
     participant.guesses.forEach(guess => {
-        guessesObj[guess.question_type] = guess.guess_value;
+        let value = guess.guess_value;
+        
+        // Add +1 day to due_date to fix display issue
+        if (guess.question_type === 'due_date' && value) {
+            const dateStr = String(value).split('T')[0]; // Get YYYY-MM-DD part
+            const date = new Date(dateStr + 'T12:00:00'); // Noon to avoid timezone issues
+            date.setDate(date.getDate() + 1); // Add 1 day
+            value = date.toISOString().split('T')[0]; // Back to YYYY-MM-DD
+        }
+        
+        guessesObj[guess.question_type] = value;
     });
     
     const petalData = [
