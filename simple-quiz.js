@@ -508,15 +508,31 @@ function displayFlowers(participants) {
     console.log('Finished displaying', participants.length, 'flowers');
 }
 
+// Color palettes for flower variations
+const flowerColorPalettes = [
+    { petals: 'linear-gradient(45deg, #FF6B9D, #FFB347)', center: '#FFD700' }, // Pink-Orange
+    { petals: 'linear-gradient(45deg, #4A90E2, #64B5F6)', center: '#87CEEB' }, // Blue
+    { petals: 'linear-gradient(45deg, #9C27B0, #E1BEE7)', center: '#DDA0DD' }, // Purple
+    { petals: 'linear-gradient(45deg, #4CAF50, #8BC34A)', center: '#ADFF2F' }, // Green
+    { petals: 'linear-gradient(45deg, #FF5722, #FF8A65)', center: '#FFA500' }, // Red-Orange
+    { petals: 'linear-gradient(45deg, #00BCD4, #4DD0E1)', center: '#40E0D0' }, // Cyan
+    { petals: 'linear-gradient(45deg, #FFEB3B, #FFF176)', center: '#FFFF00' }, // Yellow
+    { petals: 'linear-gradient(45deg, #FF4081, #F8BBD9)', center: '#FFB6C1' }, // Hot Pink
+    { petals: 'linear-gradient(45deg, #3F51B5, #7986CB)', center: '#9370DB' }, // Indigo
+    { petals: 'linear-gradient(45deg, #FF9800, #FFCC02)', center: '#FFA500' }  // Amber
+];
+
 function createFlower(participant, index) {
     const flower = document.createElement('div');
     flower.className = 'flower';
     
-    // Random position
-    const x = Math.random() * 70 + 10;
-    const y = Math.random() * 60 + 20;
-    flower.style.left = x + '%';
-    flower.style.top = y + '%';
+    // Get color palette based on index (cycles through 10 palettes)
+    const colorPalette = flowerColorPalettes[index % flowerColorPalettes.length];
+    
+    // Better positioning system to avoid overlaps
+    const position = getFlowerPosition(index);
+    flower.style.left = position.x + '%';
+    flower.style.top = position.y + '%';
     
     // Get answers
     const guesses = {};
@@ -543,14 +559,47 @@ function createFlower(participant, index) {
     
     flower.innerHTML = `
         ${petalsHTML}
-        <div class="flower-center"></div>
+        <div class="flower-center" style="background: ${colorPalette.center};"></div>
         <div class="flower-stem"></div>
         <div class="flower-pot">
-            <div class="pot-text">${participant.name}</div>
+            <div class="pot-text">${participant.name}'s predictions</div>
         </div>
     `;
     
+    // Apply color palette to petals
+    setTimeout(() => {
+        const petals = flower.querySelectorAll('.flower-petal');
+        petals.forEach(petal => {
+            petal.style.background = colorPalette.petals;
+        });
+    }, 0);
+    
     return flower;
+}
+
+// Smart positioning to avoid overlaps
+function getFlowerPosition(index) {
+    const flowerWidth = 450; // Flower width in pixels
+    const flowerHeight = 340; // Flower height in pixels
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    
+    // Calculate how many flowers can fit per row
+    const flowersPerRow = Math.floor(screenWidth / flowerWidth);
+    
+    // Calculate row and column for this flower
+    const row = Math.floor(index / flowersPerRow);
+    const col = index % flowersPerRow;
+    
+    // Calculate position with some randomness but avoid overlaps
+    const baseX = (col * (100 / flowersPerRow)) + (Math.random() * 10 - 5);
+    const baseY = 20 + (row * 35) + (Math.random() * 10 - 5); // Start at 20%, then space rows
+    
+    // Ensure we don't go off screen
+    const x = Math.max(5, Math.min(95, baseX));
+    const y = Math.max(10, baseY);
+    
+    return { x, y };
 }
 
 function formatDate(dateString) {
