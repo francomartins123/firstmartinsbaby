@@ -283,12 +283,15 @@ function createFlower(participant, index) {
 }
 
 function formatDate(dateString) {
+    console.log('formatDate called with:', dateString);
     if (!dateString) return 'N/A';
     // Parse date string directly and format without any Date object to avoid timezone issues
     const [, month, day] = dateString.split('-').map(Number);
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return months[month - 1] + ' ' + day;
+    const result = months[month - 1] + ' ' + day;
+    console.log('formatDate result:', result);
+    return result;
 }
 
 // === UTILITY FUNCTIONS ===
