@@ -166,6 +166,9 @@ function loadCalendarQuestion(question, content) {
     
     const calendarHTML = `
         <div class="calendar-container">
+            <div class="due-date-info">
+                <p>Expected Due Date: October 14th, 2025</p>
+            </div>
             <div class="calendar-grid" id="calendarGrid">
                 <!-- Calendar days will be generated here -->
             </div>
@@ -187,6 +190,12 @@ function loadCalendarQuestion(question, content) {
     for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
         const dayButton = document.createElement('div');
         dayButton.className = 'calendar-day';
+        
+        // Special styling for due date (October 14th)
+        if (date.getMonth() === 9 && date.getDate() === 14) {
+            dayButton.classList.add('due-date');
+        }
+        
         dayButton.textContent = date.getDate();
         dayButton.dataset.date = date.toISOString().split('T')[0];
         
