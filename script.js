@@ -284,7 +284,9 @@ function createFlower(participant, index) {
 
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
-    const date = new Date(dateString);
+    // Parse date string directly without timezone conversion to avoid off-by-one errors
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // month is 0-indexed in Date constructor
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
