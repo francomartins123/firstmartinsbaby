@@ -251,11 +251,6 @@ function createFlower(participant, index) {
     // Convert guesses array to object
     const guessesObj = {};
     participant.guesses.forEach(guess => {
-        // DEBUGGING: Log the raw value we get from Supabase
-        if (guess.question_type === 'due_date') {
-            console.log(`🔍 RAW from Supabase for ${participant.name}:`, guess.guess_value, typeof guess.guess_value);
-        }
-        
         guessesObj[guess.question_type] = guess.guess_value;
     });
     
