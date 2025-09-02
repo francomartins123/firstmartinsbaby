@@ -102,13 +102,6 @@ const db = {
             throw participantsError;
         }
 
-        // Debug: Log what we're getting from the database
-        participants.forEach(p => {
-            const dateGuess = p.guesses.find(g => g.question_type === 'due_date');
-            if (dateGuess) {
-                console.log(`DB raw data for ${p.name}: due_date =`, dateGuess.guess_value, typeof dateGuess.guess_value);
-            }
-        });
 
         return participants;
     },

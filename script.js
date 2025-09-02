@@ -1,4 +1,4 @@
-// Main application JavaScript - Cache bust: 2025-09-02-2-45PM
+// Main application JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     
     // Check if we're on the entry page
@@ -248,37 +248,14 @@ function createFlower(participant, index) {
     flowerDiv.style.left = `${x}%`;
     flowerDiv.style.top = `${y}%`;
     
-    // Convert guesses array to object with safeguards
+    // Convert guesses array to object
     const guessesObj = {};
     participant.guesses.forEach(guess => {
-        // Ensure we preserve the exact string value from the database
-        let value = guess.guess_value;
-        
-        // For dates, ensure we maintain the original string format
-        if (guess.question_type === 'due_date' && value) {
-            // Convert to string and extract just the date part if it's an ISO string
-            value = String(value).split('T')[0];
-        }
-        
-        guessesObj[guess.question_type] = value;
+        guessesObj[guess.question_type] = guess.guess_value;
     });
     
-    // Create petals with guess data - FORCE CORRECT DATES
-    let dueDateValue = guessesObj.due_date;
-    console.log(`🔥 BEFORE formatDate for ${participant.name}: dueDateValue =`, dueDateValue);
-    
-    // AGGRESSIVE FIX: Directly correct known wrong dates at display time
-    if (dueDateValue === '2025-10-02' && (participant.name === 'Julia' || participant.name === 'Elise')) {
-        dueDateValue = '2025-10-03';
-        console.log(`🔥 CORRECTED ${participant.name} date from 2025-10-02 to 2025-10-03`);
-    }
-    if (dueDateValue === '2025-10-18' && participant.name === 'Franco') {
-        dueDateValue = '2025-10-19'; 
-        console.log(`🔥 CORRECTED Franco date from 2025-10-18 to 2025-10-19`);
-    }
-    
     const petalData = [
-        { label: 'Due', value: dueDateValue },
+        { label: 'Due', value: guessesObj.due_date },
         { label: 'Weight', value: `${guessesObj.weight} lbs` },
         { label: 'Name', value: guessesObj.middle_name },
         { label: 'Time', value: guessesObj.birth_time },
@@ -304,35 +281,6 @@ function createFlower(participant, index) {
     return flowerDiv;
 }
 
-function formatDate(dateString) {
-    console.log('🎯 formatDate received:', dateString, typeof dateString);
-    
-    if (!dateString) return 'N/A';
-    
-    const dateStr = String(dateString).trim();
-    let datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
-    
-    console.log('🎯 Processing datePart:', datePart);
-    
-    // Parse the date components directly from the YYYY-MM-DD string
-    const parts = datePart.split('-');
-    if (parts.length !== 3) return 'Invalid Date';
-    
-    const month = parseInt(parts[1], 10);
-    const day = parseInt(parts[2], 10);
-    
-    console.log('🎯 Parsed month:', month, 'day:', day);
-    
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    if (month < 1 || month > 12) return 'Invalid Month';
-    
-    const result = months[month - 1] + ' ' + day;
-    console.log('🎯 formatDate returning:', result);
-    
-    return result;
-}
 
 // === UTILITY FUNCTIONS ===
 function showLoading(element) {
