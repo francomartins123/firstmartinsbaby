@@ -82,7 +82,7 @@ body {
     max-width: 400px;
     padding: 0;
     position: absolute;
-    top: 70%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
@@ -104,57 +104,59 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
     margin-top: 0;
     position: relative;
 }
 
 .name-form input {
-    padding: 0.7rem 1rem;
-    font-size: 0.9rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
     border: none;
-    border-radius: 25px;
+    border-radius: 30px;
     outline: none;
     font-family: 'Fredoka', cursive;
     text-align: center;
-    background: rgba(255, 182, 193, 0.9);
-    width: 240px;
-    height: 40px;
+    background: rgba(255, 182, 193, 0.95);
+    width: 280px;
+    height: 45px;
     color: #333;
     font-weight: 500;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
 .name-form input::placeholder {
     color: #666;
-    font-size: 0.85rem;
+    font-size: 1rem;
 }
 
 .name-form input:focus {
     background: rgba(255, 182, 193, 1);
-    outline: 2px solid rgba(255, 105, 180, 0.5);
+    outline: 3px solid rgba(255, 105, 180, 0.4);
+    transform: translateY(-1px);
 }
 
 .start-btn {
-    padding: 0.7rem 1rem;
-    font-size: 0.9rem;
-    background: rgba(255, 105, 180, 0.9);
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background: rgba(255, 105, 180, 0.95);
     color: white;
     border: none;
-    border-radius: 25px;
+    border-radius: 30px;
     font-family: 'Fredoka', cursive;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 240px;
-    height: 40px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: 280px;
+    height: 45px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    text-transform: uppercase;
 }
 
 .start-btn:hover {
     background: rgba(255, 105, 180, 1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
 }
 
 /* === QUIZ SCREEN === */
