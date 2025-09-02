@@ -69,40 +69,63 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function startQuiz() {
-    // Hide welcome, show quiz
-    document.getElementById('welcomeScreen').style.display = 'none';
-    document.getElementById('quizScreen').style.display = 'flex';
+    console.log('Starting quiz...');
+    
+    // Hide welcome, show quiz using CSS classes
+    document.getElementById('welcomeScreen').classList.remove('active');
+    document.getElementById('quizScreen').classList.add('active');
     
     // Load first question
+    console.log('Loading first question...');
     loadQuestion(0);
 }
 
 function loadQuestion(index) {
+    console.log('Loading question', index, 'of', questions.length);
     currentQuestion = index;
     
     if (index >= questions.length) {
+        console.log('Quiz finished, showing results');
         finishQuiz();
         return;
     }
     
     const question = questions[index];
+    console.log('Question:', question);
     
     // Update progress
     const progress = ((index + 1) / questions.length) * 100;
-    document.querySelector('.progress-fill').style.width = progress + '%';
-    document.getElementById('currentQuestion').textContent = index + 1;
-    document.getElementById('totalQuestions').textContent = questions.length;
+    const progressBar = document.querySelector('.progress-fill');
+    if (progressBar) progressBar.style.width = progress + '%';
+    
+    const currentSpan = document.getElementById('currentQuestion');
+    if (currentSpan) currentSpan.textContent = index + 1;
+    
+    const totalSpan = document.getElementById('totalQuestions');
+    if (totalSpan) totalSpan.textContent = questions.length;
     
     // Update question title
-    document.getElementById('questionTitle').textContent = question.title;
+    const titleElement = document.getElementById('questionTitle');
+    if (titleElement) {
+        titleElement.textContent = question.title;
+        console.log('Set title to:', question.title);
+    }
     
     // Hide buttons initially
-    document.getElementById('nextButton').style.display = 'none';
-    document.getElementById('finishButton').style.display = 'none';
+    const nextBtn = document.getElementById('nextButton');
+    const finishBtn = document.getElementById('finishButton');
+    if (nextBtn) nextBtn.style.display = 'none';
+    if (finishBtn) finishBtn.style.display = 'none';
     
     // Load question content based on type
     const content = document.getElementById('questionContent');
+    if (!content) {
+        console.error('Question content element not found!');
+        return;
+    }
+    
     content.innerHTML = '';
+    console.log('Loading question type:', question.type);
     
     switch(question.type) {
         case 'calendar':
@@ -120,11 +143,15 @@ function loadQuestion(index) {
         case 'multi-select':
             loadMultiSelectQuestion(question, content);
             break;
+        default:
+            console.error('Unknown question type:', question.type);
     }
 }
 
 // Calendar Question (Page 1)
 function loadCalendarQuestion(question, content) {
+    console.log('Loading calendar question');
+    
     const calendarHTML = `
         <div class="calendar-container">
             <div class="calendar-grid" id="calendarGrid">
@@ -139,6 +166,12 @@ function loadCalendarQuestion(question, content) {
     const endDate = new Date(2025, 9, 20);   // Oct 20, 2025
     const grid = document.getElementById('calendarGrid');
     
+    if (!grid) {
+        console.error('Calendar grid not found!');
+        return;
+    }
+    
+    let dayCount = 0;
     for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
         const dayButton = document.createElement('div');
         dayButton.className = 'calendar-day';
@@ -155,7 +188,10 @@ function loadCalendarQuestion(question, content) {
         
         dayButton.onclick = () => selectDate(dayButton.dataset.date);
         grid.appendChild(dayButton);
+        dayCount++;
     }
+    
+    console.log('Created', dayCount, 'calendar days');
 }
 
 function selectDate(dateString) {
