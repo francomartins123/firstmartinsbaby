@@ -251,21 +251,12 @@ function createFlower(participant, index) {
     // Convert guesses array to object
     const guessesObj = {};
     participant.guesses.forEach(guess => {
-        let value = guess.guess_value;
-        
-        // Add +1 day to due_date and format for display
-        if (guess.question_type === 'due_date' && value) {
-            const dateStr = String(value).split('T')[0]; // Get YYYY-MM-DD part
-            const date = new Date(dateStr + 'T12:00:00'); // Noon to avoid timezone issues
-            date.setDate(date.getDate() + 1); // Add 1 day
-            
-            // Format as "Oct 5" instead of "2025-10-05"
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            value = months[date.getMonth()] + ' ' + date.getDate();
+        // DEBUGGING: Log the raw value we get from Supabase
+        if (guess.question_type === 'due_date') {
+            console.log(`🔍 RAW from Supabase for ${participant.name}:`, guess.guess_value, typeof guess.guess_value);
         }
         
-        guessesObj[guess.question_type] = value;
+        guessesObj[guess.question_type] = guess.guess_value;
     });
     
     const petalData = [
