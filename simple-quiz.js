@@ -266,7 +266,6 @@ function loadTimeQuestion(question, content) {
         <div class="time-picker-container">
             <div class="time-scrollers">
                 <div class="time-scroller">
-                    <label>Hour</label>
                     <select id="hourSelect" class="time-select">
                         ${Array.from({length: 12}, (_, i) => 
                             `<option value="${i + 1}">${i + 1}</option>`
@@ -274,7 +273,6 @@ function loadTimeQuestion(question, content) {
                     </select>
                 </div>
                 <div class="time-scroller">
-                    <label>Minute</label>
                     <select id="minuteSelect" class="time-select">
                         ${Array.from({length: 60}, (_, i) => 
                             `<option value="${i.toString().padStart(2, '0')}">${i.toString().padStart(2, '0')}</option>`
