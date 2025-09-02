@@ -539,7 +539,7 @@ function createFlower(participant, index) {
     
     flower.innerHTML = `
         ${petalsHTML}
-        <div class="flower-center"></div>
+        <div class="flower-center">😊</div>
         <div class="flower-stem"></div>
         <div class="flower-pot">
             <div class="pot-text">${participant.name}</div>

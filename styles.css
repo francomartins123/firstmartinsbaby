@@ -314,8 +314,8 @@ body {
 /* === FLOWER STYLES === */
 .flower {
     position: absolute;
-    width: 350px;
-    height: 380px;
+    width: 450px;
+    height: 400px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -341,13 +341,13 @@ body {
     border: 2px solid rgba(255,255,255,0.3);
 }
 
-/* Positioned with large spacing to prevent overlap */
-.flower-petal:nth-child(1) { top: -40px; left: 50px; transform: rotate(0deg); }
-.flower-petal:nth-child(2) { top: -10px; left: 120px; transform: rotate(60deg); }
-.flower-petal:nth-child(3) { top: 70px; left: 120px; transform: rotate(120deg); }
-.flower-petal:nth-child(4) { top: 110px; left: 50px; transform: rotate(180deg); }
-.flower-petal:nth-child(5) { top: 70px; left: -20px; transform: rotate(240deg); }
-.flower-petal:nth-child(6) { top: -10px; left: -20px; transform: rotate(300deg); }
+/* Positioned with maximum spacing to prevent any overlap */
+.flower-petal:nth-child(1) { top: -60px; left: 125px; transform: rotate(0deg); }
+.flower-petal:nth-child(2) { top: -10px; left: 200px; transform: rotate(60deg); }
+.flower-petal:nth-child(3) { top: 90px; left: 200px; transform: rotate(120deg); }
+.flower-petal:nth-child(4) { top: 140px; left: 125px; transform: rotate(180deg); }
+.flower-petal:nth-child(5) { top: 90px; left: 50px; transform: rotate(240deg); }
+.flower-petal:nth-child(6) { top: -10px; left: 50px; transform: rotate(300deg); }
 
 .petal-label {
     font-size: 0.65rem;
@@ -369,8 +369,8 @@ body {
 
 .flower-center {
     position: absolute;
-    top: 35px;
-    left: 75px;
+    top: 40px;
+    left: 150px;
     width: 50px;
     height: 50px;
     background: #FFD700;
@@ -378,33 +378,38 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     border: 3px solid rgba(255,255,255,0.4);
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
 }
 
 .flower-stem {
     position: absolute;
-    top: 85px;
-    left: 96px;
+    top: 90px;
+    left: 171px;
     width: 8px;
-    height: 90px;
+    height: 100px;
     background: #4CAF50;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: -1;
 }
 
 .flower-pot {
     position: absolute;
     bottom: 0;
-    left: 50px;
+    left: 125px;
     width: 100px;
-    height: 60px;
-    background: linear-gradient(45deg, #8D6E63, #A1887F);
-    border-radius: 0 0 50px 50px;
+    height: 70px;
+    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 70%, #5D4037 100%);
+    border-radius: 8px 8px 40px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 3px solid rgba(139, 110, 99, 0.8);
+    border-top: 4px solid #A1887F;
 }
 
 .pot-text {
