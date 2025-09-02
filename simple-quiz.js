@@ -522,19 +522,20 @@ function createFlower(participant, index) {
         guesses[g.question_type] = g.guess_value;
     });
     
-    // Create petals
+    // Create petals with labels and values
     const petals = [
-        formatDate(guesses.due_date),
-        `${guesses.weight} lbs`,
-        guesses.middle_name || 'TBD',
-        guesses.birth_time || 'TBD',
-        guesses.eye_color || 'TBD',
-        guesses.hair_color || 'TBD'
+        { label: 'Due Date', value: formatDate(guesses.due_date) },
+        { label: 'Weight', value: `${guesses.weight} lbs` },
+        { label: 'Name', value: guesses.middle_name || 'TBD' },
+        { label: 'Birth Time', value: guesses.birth_time || 'TBD' },
+        { label: 'Eye Color', value: guesses.eye_color || 'TBD' },
+        { label: 'Hair Color', value: guesses.hair_color || 'TBD' }
     ];
     
-    const petalsHTML = petals.map(text => `
+    const petalsHTML = petals.map(petal => `
         <div class="flower-petal">
-            <div class="petal-text">${text}</div>
+            <div class="petal-label">${petal.label}</div>
+            <div class="petal-value">${petal.value}</div>
         </div>
     `).join('');
     
