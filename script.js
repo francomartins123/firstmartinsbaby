@@ -292,10 +292,14 @@ function createFlower(participant, index) {
 }
 
 function formatDate(dateString) {
+    console.log('🎯 formatDate received:', dateString, typeof dateString);
+    
     if (!dateString) return 'N/A';
     
     const dateStr = String(dateString).trim();
     let datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+    
+    console.log('🎯 Processing datePart:', datePart);
     
     // Parse the date components directly from the YYYY-MM-DD string
     const parts = datePart.split('-');
@@ -304,12 +308,17 @@ function formatDate(dateString) {
     const month = parseInt(parts[1], 10);
     const day = parseInt(parts[2], 10);
     
+    console.log('🎯 Parsed month:', month, 'day:', day);
+    
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
     if (month < 1 || month > 12) return 'Invalid Month';
     
-    return months[month - 1] + ' ' + day;
+    const result = months[month - 1] + ' ' + day;
+    console.log('🎯 formatDate returning:', result);
+    
+    return result;
 }
 
 // === UTILITY FUNCTIONS ===
