@@ -384,50 +384,68 @@ function showFinishButton() {
 function finishQuiz() {
     console.log('Quiz complete! Answers:', answers);
     
-    // Hide quiz, show results
-    document.getElementById('quizScreen').style.display = 'none';
-    document.getElementById('resultsScreen').style.display = 'flex';
+    // Hide quiz, show results using CSS classes
+    document.getElementById('quizScreen').classList.remove('active');
+    document.getElementById('resultsScreen').classList.add('active');
     
     // Save to database and show results
     saveAndShowResults();
 }
 
 async function saveAndShowResults() {
+    console.log('Saving results and showing flower garden');
+    
     // Show results first, then try to save in background
     showFlowerGarden();
     
     // Try to save data in background
     setTimeout(async () => {
         try {
+            console.log('Attempting to save data to database...');
+            
             // Dynamically load Supabase only when needed
             if (!window.supabaseLoaded) {
+                console.log('Loading Supabase...');
                 const script = document.createElement('script');
                 script.src = 'supabase.js';
                 document.head.appendChild(script);
                 
                 await new Promise(resolve => {
                     script.onload = resolve;
+                    script.onerror = () => {
+                        console.error('Failed to load supabase.js');
+                        resolve();
+                    };
                 });
                 
                 window.supabaseLoaded = true;
             }
             
             if (typeof SupabaseDB !== 'undefined') {
+                console.log('Supabase loaded, creating database instance...');
                 const db = new SupabaseDB();
                 
                 // Create participant
+                console.log('Creating participant:', playerName);
                 const participant = await db.createParticipant(playerName);
+                console.log('Participant created:', participant);
                 
                 // Save all answers
+                console.log('Saving answers:', answers);
                 for (const [type, value] of Object.entries(answers)) {
                     await db.createGuess(participant.id, type, value);
+                    console.log('Saved guess:', type, value);
                 }
                 
-                console.log('Data saved successfully!');
+                console.log('All data saved successfully!');
                 
                 // Refresh flower garden with all participants
+                console.log('Loading all participants for flower garden...');
                 const participants = await db.getAllParticipants();
+                console.log('Found participants:', participants.length);
                 displayFlowers(participants);
+            } else {
+                console.error('SupabaseDB not available after loading');
             }
         } catch (error) {
             console.error('Error saving data:', error);
@@ -436,6 +454,9 @@ async function saveAndShowResults() {
 }
 
 function showFlowerGarden() {
+    console.log('Showing flower garden for player:', playerName);
+    console.log('Player answers:', answers);
+    
     // Show current user's flower immediately (offline mode)
     const currentUser = {
         name: playerName,
@@ -445,25 +466,44 @@ function showFlowerGarden() {
         }))
     };
     
+    console.log('Current user object:', currentUser);
     displayFlowers([currentUser]);
-    console.log('Showing offline flower garden');
+    console.log('Displayed offline flower garden');
 }
 
 function displayFlowers(participants) {
+    console.log('displayFlowers called with', participants.length, 'participants');
+    
     const garden = document.getElementById('flowerGarden');
     const count = document.getElementById('participantCount');
     
+    if (!garden) {
+        console.error('Flower garden element not found!');
+        return;
+    }
+    
+    if (!count) {
+        console.error('Participant count element not found!');
+        return;
+    }
+    
     count.textContent = participants.length;
+    console.log('Set participant count to:', participants.length);
     
     // Clear existing flowers except count
     const existingFlowers = garden.querySelectorAll('.flower');
+    console.log('Removing', existingFlowers.length, 'existing flowers');
     existingFlowers.forEach(f => f.remove());
     
     // Create flowers
     participants.forEach((participant, index) => {
+        console.log('Creating flower for participant:', participant.name);
         const flower = createFlower(participant, index);
         garden.appendChild(flower);
+        console.log('Added flower to garden');
     });
+    
+    console.log('Finished displaying', participants.length, 'flowers');
 }
 
 function createFlower(participant, index) {
