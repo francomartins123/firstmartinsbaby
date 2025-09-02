@@ -248,11 +248,19 @@ function createFlower(participant, index) {
     flowerDiv.style.left = `${x}%`;
     flowerDiv.style.top = `${y}%`;
     
-    // Convert guesses array to object
+    // Convert guesses array to object with safeguards
     const guessesObj = {};
     participant.guesses.forEach(guess => {
-        console.log(`Processing guess for ${participant.name}:`, guess.question_type, '=', guess.guess_value);
-        guessesObj[guess.question_type] = guess.guess_value;
+        // Ensure we preserve the exact string value from the database
+        let value = guess.guess_value;
+        
+        // For dates, ensure we maintain the original string format
+        if (guess.question_type === 'due_date' && value) {
+            // Convert to string and extract just the date part if it's an ISO string
+            value = String(value).split('T')[0];
+        }
+        
+        guessesObj[guess.question_type] = value;
     });
     
     // Create petals with guess data
@@ -284,15 +292,34 @@ function createFlower(participant, index) {
 }
 
 function formatDate(dateString) {
-    console.log('formatDate called with:', dateString);
     if (!dateString) return 'N/A';
-    // Parse date string directly and format without any Date object to avoid timezone issues
-    const [, month, day] = dateString.split('-').map(Number);
+    
+    // Ensure we're working with a string and handle any potential conversion issues
+    const dateStr = String(dateString).trim();
+    
+    // Handle both YYYY-MM-DD format and potential ISO format
+    let datePart;
+    if (dateStr.includes('T')) {
+        // ISO format like "2025-10-03T00:00:00.000Z"
+        datePart = dateStr.split('T')[0];
+    } else {
+        // Already in YYYY-MM-DD format
+        datePart = dateStr;
+    }
+    
+    // Parse date string directly without any Date object conversion
+    const parts = datePart.split('-');
+    if (parts.length !== 3) return 'Invalid Date';
+    
+    const month = parseInt(parts[1], 10);
+    const day = parseInt(parts[2], 10);
+    
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const result = months[month - 1] + ' ' + day;
-    console.log('formatDate result:', result);
-    return result;
+    
+    if (month < 1 || month > 12) return 'Invalid Month';
+    
+    return months[month - 1] + ' ' + day;
 }
 
 // === UTILITY FUNCTIONS ===
