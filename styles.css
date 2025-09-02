@@ -349,6 +349,8 @@ body {
     position: relative;
     min-height: 100vh;
     padding: 2rem;
+    background: url('flower garden background.png') center center / cover no-repeat;
+    background-color: #87CEEB; /* Fallback color */
 }
 
 .participant-count {
