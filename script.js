@@ -253,12 +253,16 @@ function createFlower(participant, index) {
     participant.guesses.forEach(guess => {
         let value = guess.guess_value;
         
-        // Add +1 day to due_date to fix display issue
+        // Add +1 day to due_date and format for display
         if (guess.question_type === 'due_date' && value) {
             const dateStr = String(value).split('T')[0]; // Get YYYY-MM-DD part
             const date = new Date(dateStr + 'T12:00:00'); // Noon to avoid timezone issues
             date.setDate(date.getDate() + 1); // Add 1 day
-            value = date.toISOString().split('T')[0]; // Back to YYYY-MM-DD
+            
+            // Format as "Oct 5" instead of "2025-10-05"
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            value = months[date.getMonth()] + ' ' + date.getDate();
         }
         
         guessesObj[guess.question_type] = value;
