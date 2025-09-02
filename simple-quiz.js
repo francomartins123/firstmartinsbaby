@@ -1,34 +1,43 @@
-// Simple quiz with no external dependencies
+// Updated quiz with new interactive questions
 const questions = [
     {
+        id: 1,
         title: "When will our little one arrive?",
-        optionA: { text: "Early Bird\nOctober 5-10", value: "2025-10-08" },
-        optionB: { text: "Right on Time\nOctober 11-17", value: "2025-10-14" }
+        type: "calendar",
+        field: "due_date"
     },
     {
+        id: 2, 
         title: "How much will our baby weigh?",
-        optionA: { text: "Petite Bundle\n6-7 lbs", value: "6.5" },
-        optionB: { text: "Chunky Monkey\n8-9 lbs", value: "8.5" }
+        type: "slider",
+        field: "weight",
+        min: 5,
+        max: 10,
+        step: 0.25,
+        unit: "lbs"
     },
     {
+        id: 3,
         title: "What will be baby's middle name?",
-        optionA: { text: "Classic Choice\nJames", value: "James" },
-        optionB: { text: "Modern Pick\nAiden", value: "Aiden" }
+        type: "text",
+        field: "middle_name",
+        placeholder: "Enter middle name"
     },
     {
-        title: "What time of day will baby arrive?",
-        optionA: { text: "Morning Glory\n6AM - 12PM", value: "Morning" },
-        optionB: { text: "Night Owl\n6PM - 12AM", value: "Night" }
+        id: 4,
+        title: "What time of day will baby arrive?", 
+        type: "time",
+        field: "birth_time"
     },
     {
-        title: "What color will baby's eyes be?",
-        optionA: { text: "Ocean Blue\nBlue eyes", value: "Blue" },
-        optionB: { text: "Warm Brown\nBrown eyes", value: "Brown" }
-    },
-    {
-        title: "How much hair will baby have?",
-        optionA: { text: "Fuzzy Peach\nLight hair", value: "Light" },
-        optionB: { text: "Full Mane\nLots of hair", value: "Dark" }
+        id: 5,
+        title: "What color eyes and hair will our baby be born with?",
+        type: "multi-select",
+        fields: ["eye_color", "hair_color"],
+        options: {
+            eye_color: ["Green", "Blue", "Black", "Brown"],
+            hair_color: ["Blonde", "Brown", "Bald", "Black"]
+        }
     }
 ];
 
@@ -84,30 +93,256 @@ function loadQuestion(index) {
     document.getElementById('currentQuestion').textContent = index + 1;
     document.getElementById('totalQuestions').textContent = questions.length;
     
-    // Update question
+    // Update question title
     document.getElementById('questionTitle').textContent = question.title;
-    document.querySelector('#optionA .option-text').innerHTML = question.optionA.text;
-    document.querySelector('#optionB .option-text').innerHTML = question.optionB.text;
     
-    // Setup click handlers
-    document.getElementById('optionA').onclick = () => selectAnswer('A');
-    document.getElementById('optionB').onclick = () => selectAnswer('B');
+    // Hide buttons initially
+    document.getElementById('nextButton').style.display = 'none';
+    document.getElementById('finishButton').style.display = 'none';
+    
+    // Load question content based on type
+    const content = document.getElementById('questionContent');
+    content.innerHTML = '';
+    
+    switch(question.type) {
+        case 'calendar':
+            loadCalendarQuestion(question, content);
+            break;
+        case 'slider':
+            loadSliderQuestion(question, content);
+            break;
+        case 'text':
+            loadTextQuestion(question, content);
+            break;
+        case 'time':
+            loadTimeQuestion(question, content);
+            break;
+        case 'multi-select':
+            loadMultiSelectQuestion(question, content);
+            break;
+    }
 }
 
-function selectAnswer(choice) {
-    const question = questions[currentQuestion];
-    const value = choice === 'A' ? question.optionA.value : question.optionB.value;
+// Calendar Question (Page 1)
+function loadCalendarQuestion(question, content) {
+    const calendarHTML = `
+        <div class="calendar-container">
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar days will be generated here -->
+            </div>
+        </div>
+    `;
+    content.innerHTML = calendarHTML;
     
-    // Store answer
-    const questionTypes = ['due_date', 'weight', 'middle_name', 'birth_time', 'eye_color', 'hair_color'];
-    answers[questionTypes[currentQuestion]] = value;
+    // Generate calendar for Sept 20 - Oct 20
+    const startDate = new Date(2025, 8, 20); // Sept 20, 2025
+    const endDate = new Date(2025, 9, 20);   // Oct 20, 2025
+    const grid = document.getElementById('calendarGrid');
     
-    console.log('Answer stored:', questionTypes[currentQuestion], value);
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        const dayButton = document.createElement('div');
+        dayButton.className = 'calendar-day';
+        dayButton.textContent = date.getDate();
+        dayButton.dataset.date = date.toISOString().split('T')[0];
+        
+        // Add month label for first day of each month
+        if (date.getDate() === 1 || (date.getMonth() === 8 && date.getDate() === 20)) {
+            const monthLabel = document.createElement('div');
+            monthLabel.className = 'month-label';
+            monthLabel.textContent = date.toLocaleDateString('en-US', { month: 'long' });
+            grid.appendChild(monthLabel);
+        }
+        
+        dayButton.onclick = () => selectDate(dayButton.dataset.date);
+        grid.appendChild(dayButton);
+    }
+}
+
+function selectDate(dateString) {
+    answers.due_date = dateString;
     
-    // Next question after brief delay
-    setTimeout(() => {
+    // Visual feedback
+    document.querySelectorAll('.calendar-day').forEach(day => day.classList.remove('selected'));
+    document.querySelector(`[data-date="${dateString}"]`).classList.add('selected');
+    
+    // Show next button
+    showNextButton();
+}
+
+// Slider Question (Page 2) 
+function loadSliderQuestion(question, content) {
+    const sliderHTML = `
+        <div class="slider-container">
+            <div class="weight-display" id="weightDisplay">${question.min} ${question.unit}</div>
+            <input type="range" 
+                   id="weightSlider" 
+                   class="weight-slider"
+                   min="${question.min}" 
+                   max="${question.max}" 
+                   step="${question.step}"
+                   value="${question.min}">
+            <div class="slider-labels">
+                <span>${question.min} ${question.unit}</span>
+                <span>${question.max} ${question.unit}</span>
+            </div>
+        </div>
+    `;
+    content.innerHTML = sliderHTML;
+    
+    const slider = document.getElementById('weightSlider');
+    const display = document.getElementById('weightDisplay');
+    
+    slider.oninput = () => {
+        const value = parseFloat(slider.value);
+        display.textContent = `${value} ${question.unit}`;
+        answers[question.field] = value;
+        showNextButton();
+    };
+}
+
+// Text Question (Page 3)
+function loadTextQuestion(question, content) {
+    const textHTML = `
+        <div class="text-input-container">
+            <input type="text" 
+                   id="nameInput" 
+                   class="name-input"
+                   placeholder="${question.placeholder}"
+                   maxlength="50">
+        </div>
+    `;
+    content.innerHTML = textHTML;
+    
+    const input = document.getElementById('nameInput');
+    input.oninput = () => {
+        answers[question.field] = input.value.trim();
+        if (input.value.trim()) {
+            showNextButton();
+        } else {
+            hideNextButton();
+        }
+    };
+}
+
+// Time Question (Page 4)
+function loadTimeQuestion(question, content) {
+    const timeHTML = `
+        <div class="time-picker-container">
+            <div class="time-scrollers">
+                <div class="time-scroller">
+                    <label>Hour</label>
+                    <select id="hourSelect" class="time-select">
+                        ${Array.from({length: 12}, (_, i) => 
+                            `<option value="${i + 1}">${i + 1}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="time-scroller">
+                    <label>Minute</label>
+                    <select id="minuteSelect" class="time-select">
+                        ${Array.from({length: 60}, (_, i) => 
+                            `<option value="${i.toString().padStart(2, '0')}">${i.toString().padStart(2, '0')}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="time-scroller">
+                    <label>AM/PM</label>
+                    <select id="ampmSelect" class="time-select">
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    `;
+    content.innerHTML = timeHTML;
+    
+    const updateTime = () => {
+        const hour = document.getElementById('hourSelect').value;
+        const minute = document.getElementById('minuteSelect').value;
+        const ampm = document.getElementById('ampmSelect').value;
+        answers[question.field] = `${hour}:${minute} ${ampm}`;
+        showNextButton();
+    };
+    
+    document.getElementById('hourSelect').onchange = updateTime;
+    document.getElementById('minuteSelect').onchange = updateTime;
+    document.getElementById('ampmSelect').onchange = updateTime;
+    
+    // Set default to show next button
+    updateTime();
+}
+
+// Multi-Select Question (Page 5 - Final)
+function loadMultiSelectQuestion(question, content) {
+    const multiHTML = `
+        <div class="multi-select-container">
+            <div class="selection-group">
+                <h3>Eye Color</h3>
+                <div class="color-options" id="eyeOptions">
+                    ${question.options.eye_color.map(color => 
+                        `<div class="color-option" data-type="eye_color" data-value="${color}">
+                            <div class="color-circle eye-${color.toLowerCase()}"></div>
+                            <span>${color}</span>
+                        </div>`
+                    ).join('')}
+                </div>
+            </div>
+            
+            <div class="selection-group">
+                <h3>Hair Color</h3>
+                <div class="color-options" id="hairOptions">
+                    ${question.options.hair_color.map(color => 
+                        `<div class="color-option" data-type="hair_color" data-value="${color}">
+                            <div class="color-circle hair-${color.toLowerCase()}"></div>
+                            <span>${color}</span>
+                        </div>`
+                    ).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    content.innerHTML = multiHTML;
+    
+    // Add click handlers for color options
+    document.querySelectorAll('.color-option').forEach(option => {
+        option.onclick = () => {
+            const type = option.dataset.type;
+            const value = option.dataset.value;
+            
+            // Remove selection from same type
+            document.querySelectorAll(`[data-type="${type}"]`).forEach(opt => 
+                opt.classList.remove('selected')
+            );
+            
+            // Add selection to clicked option
+            option.classList.add('selected');
+            answers[type] = value;
+            
+            // Show finish button if both selected
+            if (answers.eye_color && answers.hair_color) {
+                showFinishButton();
+            }
+        };
+    });
+}
+
+function showNextButton() {
+    document.getElementById('nextButton').style.display = 'block';
+    document.getElementById('nextButton').onclick = () => {
         loadQuestion(currentQuestion + 1);
-    }, 500);
+    };
+}
+
+function hideNextButton() {
+    document.getElementById('nextButton').style.display = 'none';
+}
+
+function showFinishButton() {
+    document.getElementById('finishButton').style.display = 'block';
+    document.getElementById('finishButton').onclick = () => {
+        finishQuiz();
+    };
 }
 
 function finishQuiz() {

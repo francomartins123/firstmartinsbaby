@@ -42,7 +42,7 @@
                 <div class="progress-fill"></div>
             </div>
             <div class="progress-text">
-                <span id="currentQuestion">1</span> of <span id="totalQuestions">6</span>
+                <span id="currentQuestion">1</span> of <span id="totalQuestions">5</span>
             </div>
         </div>
 
@@ -50,21 +50,14 @@
             <div class="question-card">
                 <h2 id="questionTitle" class="question-title"></h2>
                 
-                <div class="options-container">
-                    <div class="option-card option-left" id="optionA">
-                        <div class="option-content">
-                            <div class="option-label">A</div>
-                            <div class="option-text"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="option-card option-right" id="optionB">
-                        <div class="option-content">
-                            <div class="option-label">B</div>
-                            <div class="option-text"></div>
-                        </div>
-                    </div>
+                <!-- Dynamic content area for different question types -->
+                <div id="questionContent" class="question-content">
+                    <!-- Content will be dynamically inserted here -->
                 </div>
+                
+                <!-- Navigation button (hidden until answer selected) -->
+                <button id="nextButton" class="next-btn" style="display: none;">Next Question →</button>
+                <button id="finishButton" class="finish-btn" style="display: none;">Show me my picks! 🌸</button>
             </div>
         </div>
     </div>
