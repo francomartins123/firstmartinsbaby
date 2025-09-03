@@ -349,8 +349,7 @@ body {
     position: relative;
     min-height: 100vh;
     padding: 2rem;
-    background: url('flower garden background.png') repeat;
-    background-size: cover;
+    background: #ADD8E6;
 }
 
 .participant-count {
