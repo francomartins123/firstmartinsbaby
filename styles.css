@@ -307,6 +307,14 @@ body {
 }
 
 /* === RESULTS SCREEN === */
+#resultsScreen {
+    background: #ADD8E6 !important;
+}
+
+#resultsScreen .decoration {
+    display: none !important;
+}
+
 .results-content {
     width: 100%;
     padding: 2rem;
