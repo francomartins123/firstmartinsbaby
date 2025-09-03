@@ -547,10 +547,12 @@ function createFlower(participant, index) {
     // Get color palette based on index (cycles through 10 palettes)
     const colorPalette = flowerColorPalettes[index % flowerColorPalettes.length];
     
-    // Better positioning system to avoid overlaps
-    const position = getFlowerPosition(index);
-    flower.style.left = position.x + '%';
-    flower.style.top = position.y + '%';
+    // Better positioning system to avoid overlaps (skip for mobile)
+    if (window.innerWidth > 480) {
+        const position = getFlowerPosition(index);
+        flower.style.left = position.x + '%';
+        flower.style.top = position.y + '%';
+    }
     
     // Get answers
     const guesses = {};
