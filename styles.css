@@ -959,61 +959,51 @@ body:has(#resultsScreen.active) {
         font-size: 0.9rem;
     }
     
-    .flower-garden {
-        padding: 1rem;
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 4rem 0.5rem !important;
-        justify-items: center;
-        width: 100%;
-    }
-    
     .flower {
-        width: 150px !important;
-        height: 220px !important;
-        position: relative !important;
+        width: 100px;
+        height: 130px;
     }
     
     .flower-petal {
-        width: 65px;
-        height: 40px;
+        width: 50px;
+        height: 30px;
     }
     
-    /* Much wider spaced petal positions for mobile - no overlap */
-    .flower-petal:nth-child(1) { top: -45px; left: 42px; }
-    .flower-petal:nth-child(2) { top: -20px; left: 85px; }
-    .flower-petal:nth-child(3) { top: 35px; left: 85px; }
-    .flower-petal:nth-child(4) { top: 60px; left: 42px; }
-    .flower-petal:nth-child(5) { top: 35px; left: -1px; }
-    .flower-petal:nth-child(6) { top: -20px; left: -1px; }
+    /* Mobile petal positions with better spacing to prevent overlap */
+    .flower-petal:nth-child(1) { top: -25px; left: 25px; }
+    .flower-petal:nth-child(2) { top: -8px; left: 48px; }
+    .flower-petal:nth-child(3) { top: 18px; left: 48px; }
+    .flower-petal:nth-child(4) { top: 35px; left: 25px; }
+    .flower-petal:nth-child(5) { top: 18px; left: 2px; }
+    .flower-petal:nth-child(6) { top: -8px; left: 2px; }
     
     .flower-center {
-        width: 32px;
-        height: 32px;
-        top: 17px;
-        left: 59px;
+        width: 25px;
+        height: 25px;
+        top: 12px;
+        left: 37px;
     }
     
     .flower-stem {
-        height: 80px;
-        top: 49px;
-        left: 72px;
+        height: 50px;
+        top: 37px;
+        left: 46px;
         width: 6px;
     }
     
     .flower-pot {
-        width: 65px;
-        height: 42px;
-        left: 42px;
+        width: 45px;
+        height: 30px;
+        left: 27px;
     }
     
     .petal-label {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         font-weight: 700;
     }
     
     .petal-value {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 800;
         line-height: 1.0;
     }
