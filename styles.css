@@ -960,6 +960,17 @@ body:has(#resultsScreen.active) {
     }
     
     /* Fixed mobile results layout */
+    #resultsScreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
     .results-content {
         position: relative !important;
         width: 100% !important;
@@ -967,11 +978,16 @@ body:has(#resultsScreen.active) {
         min-height: 100vh !important;
         display: flex !important;
         flex-direction: column !important;
+        flex: 1 !important;
     }
     
     .results-title {
         font-size: 1.8rem !important;
         margin-bottom: 1rem !important;
+        flex-shrink: 0 !important;
+        display: block !important;
+        visibility: visible !important;
+        z-index: 1000 !important;
     }
     
     .back-to-home-btn {
@@ -979,11 +995,19 @@ body:has(#resultsScreen.active) {
         padding: 0.8rem 1.5rem !important;
         font-size: 0.9rem !important;
         align-self: center !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        visibility: visible !important;
+        z-index: 1000 !important;
     }
     
     .participant-count {
         margin-bottom: 1rem !important;
         font-size: 1.2rem !important;
+        flex-shrink: 0 !important;
+        display: block !important;
+        visibility: visible !important;
+        z-index: 1000 !important;
     }
     
     .flower-garden {
@@ -994,8 +1018,8 @@ body:has(#resultsScreen.active) {
         gap: 3rem !important;
         padding: 0 1rem 2rem 1rem !important;
         min-height: auto !important;
-        flex: 1 !important;
-        overflow-y: visible !important;
+        background: none !important;
+        flex-shrink: 0 !important;
     }
     
     .flower {
