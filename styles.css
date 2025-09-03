@@ -309,10 +309,26 @@ body {
 /* === RESULTS SCREEN === */
 #resultsScreen {
     background: #ADD8E6 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
 }
 
 #resultsScreen .decoration {
     display: none !important;
+}
+
+/* Hide all decorations when results screen is active */
+body:has(#resultsScreen.active) .decoration {
+    display: none !important;
+}
+
+/* Override body background when results screen is active */
+body:has(#resultsScreen.active) {
+    background: #ADD8E6 !important;
 }
 
 .results-content {
