@@ -968,7 +968,7 @@ body:has(#resultsScreen.active) {
     }
     
     .flower {
-        position: static !important;
+        position: relative !important;
         left: auto !important;
         top: auto !important;
         width: 200px !important;
