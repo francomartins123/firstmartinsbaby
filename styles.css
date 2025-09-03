@@ -964,7 +964,7 @@ body:has(#resultsScreen.active) {
         flex-direction: column !important;
         align-items: center !important;
         gap: 3rem !important;
-        padding: 2rem 1rem !important;
+        padding: 4rem 1rem 2rem 1rem !important;
     }
     
     .flower {
@@ -972,7 +972,7 @@ body:has(#resultsScreen.active) {
         left: auto !important;
         top: auto !important;
         width: 200px !important;
-        height: 250px !important;
+        height: 280px !important;
         margin: 0 !important;
     }
     
@@ -981,24 +981,24 @@ body:has(#resultsScreen.active) {
         height: 50px;
     }
     
-    /* Mobile petal positions with wide spacing for readability */
-    .flower-petal:nth-child(1) { top: -45px; left: 57px; }
-    .flower-petal:nth-child(2) { top: -15px; left: 110px; }
-    .flower-petal:nth-child(3) { top: 35px; left: 110px; }
-    .flower-petal:nth-child(4) { top: 65px; left: 57px; }
-    .flower-petal:nth-child(5) { top: 35px; left: 5px; }
-    .flower-petal:nth-child(6) { top: -15px; left: 5px; }
+    /* Mobile petal positions with extra wide spacing for readability */
+    .flower-petal:nth-child(1) { top: -35px; left: 57px; }
+    .flower-petal:nth-child(2) { top: 5px; left: 130px; }
+    .flower-petal:nth-child(3) { top: 55px; left: 130px; }
+    .flower-petal:nth-child(4) { top: 85px; left: 57px; }
+    .flower-petal:nth-child(5) { top: 55px; left: -15px; }
+    .flower-petal:nth-child(6) { top: 5px; left: -15px; }
     
     .flower-center {
         width: 40px;
         height: 40px;
-        top: 20px;
+        top: 30px;
         left: 80px;
     }
     
     .flower-stem {
-        height: 80px;
-        top: 60px;
+        height: 100px;
+        top: 70px;
         left: 95px;
         width: 8px;
     }
@@ -1007,6 +1007,7 @@ body:has(#resultsScreen.active) {
         width: 80px;
         height: 50px;
         left: 60px;
+        bottom: 0px;
     }
     
     .petal-label {
