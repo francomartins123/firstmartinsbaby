@@ -827,12 +827,9 @@ function displayStatsCalendar(participants) {
     const dateGroups = {};
     
     participants.forEach(participant => {
-        console.log('Processing participant:', participant.name);
         const dueDateGuess = participant.guesses.find(g => g.question_type === 'due_date');
-        console.log('Due date guess for', participant.name, ':', dueDateGuess);
         if (dueDateGuess && dueDateGuess.guess_value) {
             const dateKey = dueDateGuess.guess_value;
-            console.log('Adding', participant.name, 'to date', dateKey);
             if (!dateGroups[dateKey]) {
                 dateGroups[dateKey] = [];
             }
@@ -866,8 +863,6 @@ function displayStatsCalendar(participants) {
         const dateKey = date.toISOString().split('T')[0];
         const predictors = dateGroups[dateKey] || [];
         
-        console.log(`Date ${date.getDate()}: ${dateKey}, predictors:`, predictors);
-        
         // Special styling for due date (October 14th)
         if (date.getMonth() === 9 && date.getDate() === 14) {
             dayElement.classList.add('due-date');
@@ -876,7 +871,6 @@ function displayStatsCalendar(participants) {
         // Special styling if this date has predictions
         if (predictors.length > 0) {
             dayElement.classList.add('has-predictions');
-            console.log(`Adding has-predictions class to ${date.getDate()}`);
         }
         
         // Create day number
@@ -887,12 +881,10 @@ function displayStatsCalendar(participants) {
         
         // Create names list
         if (predictors.length > 0) {
-            console.log(`Creating names list for ${date.getDate()} with:`, predictors);
             const namesList = document.createElement('div');
             namesList.className = 'stats-day-names';
             
             predictors.forEach(name => {
-                console.log(`Adding name element for: ${name}`);
                 const nameElement = document.createElement('span');
                 nameElement.className = 'name';
                 nameElement.textContent = name;
@@ -900,7 +892,6 @@ function displayStatsCalendar(participants) {
             });
             
             dayElement.appendChild(namesList);
-            console.log(`Added names list to day ${date.getDate()}`);
         }
         
         calendar.appendChild(dayElement);
