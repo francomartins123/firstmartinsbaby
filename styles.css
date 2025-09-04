@@ -1026,7 +1026,7 @@ body:has(#resultsScreen.active) {
         position: relative !important;
         left: auto !important;
         top: auto !important;
-        width: 200px !important;
+        width: 260px !important;
         height: 280px !important;
         margin: 0 !important;
         padding-top: 40px !important;
@@ -1038,33 +1038,35 @@ body:has(#resultsScreen.active) {
         height: 50px;
     }
     
-    /* Mobile petal positions with extra wide spacing for readability */
-    .flower-petal:nth-child(1) { top: 5px; left: 57px; }
-    .flower-petal:nth-child(2) { top: 45px; left: 130px; }
-    .flower-petal:nth-child(3) { top: 95px; left: 130px; }
-    .flower-petal:nth-child(4) { top: 125px; left: 57px; }
-    .flower-petal:nth-child(5) { top: 95px; left: -15px; }
-    .flower-petal:nth-child(6) { top: 45px; left: -15px; }
+    /* Mobile petal positions - circular layout with proper spacing */
+    .flower-petal:nth-child(1) { top: 5px; left: 87px; }        /* Top - Delivery Date */
+    .flower-petal:nth-child(2) { top: 30px; left: 145px; }      /* Top Right - Weight */
+    .flower-petal:nth-child(3) { top: 80px; left: 145px; }      /* Bottom Right - Middle Name */
+    .flower-petal:nth-child(4) { top: 125px; left: 87px; }      /* Bottom - Birth Time */
+    .flower-petal:nth-child(5) { top: 80px; left: -30px; }      /* Bottom Left - Hair Color */
+    .flower-petal:nth-child(6) { top: 30px; left: -30px; }      /* Top Left - Eye Color */
     
     .flower-center {
         width: 40px;
         height: 40px;
         top: 70px;
-        left: 80px;
+        left: 110px;
     }
     
     .flower-stem {
         height: 140px;
         top: 110px;
-        left: 95px;
+        left: 125px;
         width: 8px;
+        z-index: 1;
     }
     
     .flower-pot {
         width: 80px;
         height: 50px;
-        left: 60px;
+        left: 90px;
         bottom: 0px;
+        z-index: 5;
     }
     
     .petal-label {
