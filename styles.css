@@ -333,7 +333,7 @@ body:has(#resultsScreen.active) {
 
 .results-content {
     width: 100%;
-    padding: 2rem;
+    padding: 3rem 2rem 2rem 2rem;
     text-align: center;
 }
 
@@ -1104,7 +1104,7 @@ body:has(#resultsScreen.active) {
 
 .stats-content {
     width: 100%;
-    padding: 2rem;
+    padding: 3rem 2rem 2rem 2rem;
     text-align: center;
     max-width: 1000px;
     margin: 0 auto;
@@ -1243,8 +1243,8 @@ body:has(#resultsScreen.active) {
 }
 
 .stats-day-names {
-    font-size: 0.7rem;
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 600;
     line-height: 1.2;
     text-align: center;
     word-wrap: break-word;
