@@ -815,17 +815,39 @@ async function loadStatsData() {
 
 // Display the stats calendar with predictions
 function displayStatsCalendar(participants) {
+    console.log('displayStatsCalendar called with', participants.length, 'participants');
+    
     const calendar = document.getElementById('statsCalendarGrid');
     if (!calendar) {
+        console.error('Stats calendar element not found!');
         return;
     }
     
-    // Clear calendar
-    calendar.innerHTML = '';
+    // Group predictions by date
+    const dateGroups = {};
+    
+    participants.forEach(participant => {
+        console.log('Processing participant:', participant.name);
+        const dueDateGuess = participant.guesses.find(g => g.question_type === 'due_date');
+        console.log('Due date guess for', participant.name, ':', dueDateGuess);
+        if (dueDateGuess && dueDateGuess.guess_value) {
+            const dateKey = dueDateGuess.guess_value;
+            console.log('Adding', participant.name, 'to date', dateKey);
+            if (!dateGroups[dateKey]) {
+                dateGroups[dateKey] = [];
+            }
+            dateGroups[dateKey].push(participant.name);
+        }
+    });
+    
+    console.log('Date groups:', dateGroups);
     
     // Generate calendar for Sept 20 - Oct 20 (same as quiz)
     const startDate = new Date(2025, 8, 20); // Sept 20, 2025
     const endDate = new Date(2025, 9, 20);   // Oct 20, 2025
+    
+    // Clear calendar
+    calendar.innerHTML = '';
     
     let currentMonth = -1;
     for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
@@ -842,10 +864,19 @@ function displayStatsCalendar(participants) {
         dayElement.className = 'stats-calendar-day';
         
         const dateKey = date.toISOString().split('T')[0];
+        const predictors = dateGroups[dateKey] || [];
+        
+        console.log(`Date ${date.getDate()}: ${dateKey}, predictors:`, predictors);
         
         // Special styling for due date (October 14th)
         if (date.getMonth() === 9 && date.getDate() === 14) {
             dayElement.classList.add('due-date');
+        }
+        
+        // Special styling if this date has predictions
+        if (predictors.length > 0) {
+            dayElement.classList.add('has-predictions');
+            console.log(`Adding has-predictions class to ${date.getDate()}`);
         }
         
         // Create day number
@@ -854,32 +885,26 @@ function displayStatsCalendar(participants) {
         dayNumber.textContent = date.getDate();
         dayElement.appendChild(dayNumber);
         
-        // Find all participants who predicted this date
-        const predictorsForThisDate = [];
-        participants.forEach(participant => {
-            const dueDateGuess = participant.guesses.find(g => g.question_type === 'due_date');
-            if (dueDateGuess && dueDateGuess.guess_value === dateKey) {
-                predictorsForThisDate.push(participant.name);
-            }
-        });
-        
-        // Add names if any predictors for this date
-        if (predictorsForThisDate.length > 0) {
-            dayElement.classList.add('has-predictions');
-            
+        // Create names list
+        if (predictors.length > 0) {
+            console.log(`Creating names list for ${date.getDate()} with:`, predictors);
             const namesList = document.createElement('div');
             namesList.className = 'stats-day-names';
             
-            predictorsForThisDate.forEach(name => {
-                const nameElement = document.createElement('div');
+            predictors.forEach(name => {
+                console.log(`Adding name element for: ${name}`);
+                const nameElement = document.createElement('span');
                 nameElement.className = 'name';
                 nameElement.textContent = name;
                 namesList.appendChild(nameElement);
             });
             
             dayElement.appendChild(namesList);
+            console.log(`Added names list to day ${date.getDate()}`);
         }
         
         calendar.appendChild(dayElement);
     }
+    
+    console.log('Stats calendar populated');
 }

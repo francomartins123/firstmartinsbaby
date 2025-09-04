@@ -315,8 +315,6 @@ body {
     width: 100% !important;
     height: 100vh !important;
     overflow-y: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
 }
 
 #resultsScreen .decoration {
@@ -335,11 +333,8 @@ body:has(#resultsScreen.active) {
 
 .results-content {
     width: 100%;
-    padding: 1rem 2rem 2rem 2rem;
+    padding: 3rem 2rem 2rem 2rem;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
 }
 
 .results-title {
@@ -1105,19 +1100,14 @@ body:has(#resultsScreen.active) {
     width: 100% !important;
     height: 100vh !important;
     overflow-y: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
 }
 
 .stats-content {
     width: 100%;
-    padding: 1rem 2rem 2rem 2rem;
+    padding: 3rem 2rem 2rem 2rem;
     text-align: center;
     max-width: 1000px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
 }
 
 .stats-title {
@@ -1258,15 +1248,11 @@ body:has(#resultsScreen.active) {
     line-height: 1.2;
     text-align: center;
     word-wrap: break-word;
-    z-index: 10;
-    position: relative;
 }
 
 .stats-day-names .name {
     display: block;
     margin-bottom: 0.1rem;
-    z-index: 10;
-    position: relative;
 }
 
 /* Mobile styles for stats */
