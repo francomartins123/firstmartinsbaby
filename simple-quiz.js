@@ -87,6 +87,24 @@ document.addEventListener('DOMContentLoaded', function() {
             goBackToHome();
         });
     }
+    
+    // Setup view stats button
+    const viewStatsBtn = document.getElementById('viewStatsBtn');
+    if (viewStatsBtn) {
+        viewStatsBtn.addEventListener('click', function() {
+            console.log('Showing stats view');
+            showStatsView();
+        });
+    }
+    
+    // Setup back to garden button
+    const backToGardenBtn = document.getElementById('backToGardenBtn');
+    if (backToGardenBtn) {
+        backToGardenBtn.addEventListener('click', function() {
+            console.log('Going back to garden');
+            goBackToGarden();
+        });
+    }
 });
 
 function startQuiz() {
@@ -744,4 +762,140 @@ function goBackToHome() {
     }
     
     console.log('Returned to home screen');
+}
+
+// Show stats view
+async function showStatsView() {
+    // Hide results screen and show stats screen
+    document.getElementById('resultsScreen').classList.remove('active');
+    document.getElementById('statsScreen').classList.add('active');
+    
+    // Load and display stats
+    await loadStatsData();
+}
+
+// Go back to garden from stats
+function goBackToGarden() {
+    // Hide stats screen and show results screen
+    document.getElementById('statsScreen').classList.remove('active');
+    document.getElementById('resultsScreen').classList.add('active');
+}
+
+// Load stats data and populate calendar
+async function loadStatsData() {
+    try {
+        // Wait for database and load participants
+        await waitForDatabase();
+        
+        if (typeof db !== 'undefined' && db.getAllParticipantsWithGuesses) {
+            console.log('Loading participants for stats...');
+            const participants = await db.getAllParticipantsWithGuesses();
+            
+            if (participants && participants.length > 0) {
+                console.log('Displaying stats for', participants.length, 'participants');
+                displayStatsCalendar(participants);
+            } else {
+                console.log('No participants found for stats');
+                // Show empty message
+                const calendar = document.getElementById('statsCalendarGrid');
+                calendar.innerHTML = `
+                    <div class="empty-stats-message">
+                        <p>📊 No prediction data available yet!</p>
+                        <p>Come back after people make their predictions!</p>
+                    </div>
+                `;
+            }
+        } else {
+            console.log('Database not available for stats view');
+        }
+    } catch (error) {
+        console.error('Error loading stats data:', error);
+    }
+}
+
+// Display the stats calendar with predictions
+function displayStatsCalendar(participants) {
+    console.log('displayStatsCalendar called with', participants.length, 'participants');
+    
+    const calendar = document.getElementById('statsCalendarGrid');
+    if (!calendar) {
+        console.error('Stats calendar element not found!');
+        return;
+    }
+    
+    // Group predictions by date
+    const dateGroups = {};
+    
+    participants.forEach(participant => {
+        const dueDateGuess = participant.guesses.find(g => g.question_type === 'due_date');
+        if (dueDateGuess && dueDateGuess.guess_value) {
+            const dateKey = dueDateGuess.guess_value;
+            if (!dateGroups[dateKey]) {
+                dateGroups[dateKey] = [];
+            }
+            dateGroups[dateKey].push(participant.name);
+        }
+    });
+    
+    console.log('Date groups:', dateGroups);
+    
+    // Generate calendar for Sept 20 - Oct 20 (same as quiz)
+    const startDate = new Date(2025, 8, 20); // Sept 20, 2025
+    const endDate = new Date(2025, 9, 20);   // Oct 20, 2025
+    
+    // Clear calendar
+    calendar.innerHTML = '';
+    
+    let currentMonth = -1;
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        // Add month label for first day of each month
+        if (date.getMonth() !== currentMonth) {
+            const monthLabel = document.createElement('div');
+            monthLabel.className = 'stats-month-label';
+            monthLabel.textContent = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            calendar.appendChild(monthLabel);
+            currentMonth = date.getMonth();
+        }
+        
+        const dayElement = document.createElement('div');
+        dayElement.className = 'stats-calendar-day';
+        
+        const dateKey = date.toISOString().split('T')[0];
+        const predictors = dateGroups[dateKey] || [];
+        
+        // Special styling for due date (October 14th)
+        if (date.getMonth() === 9 && date.getDate() === 14) {
+            dayElement.classList.add('due-date');
+        }
+        
+        // Special styling if this date has predictions
+        if (predictors.length > 0) {
+            dayElement.classList.add('has-predictions');
+        }
+        
+        // Create day number
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'stats-day-number';
+        dayNumber.textContent = date.getDate();
+        dayElement.appendChild(dayNumber);
+        
+        // Create names list
+        if (predictors.length > 0) {
+            const namesList = document.createElement('div');
+            namesList.className = 'stats-day-names';
+            
+            predictors.forEach(name => {
+                const nameElement = document.createElement('span');
+                nameElement.className = 'name';
+                nameElement.textContent = name;
+                namesList.appendChild(nameElement);
+            });
+            
+            dayElement.appendChild(namesList);
+        }
+        
+        calendar.appendChild(dayElement);
+    }
+    
+    console.log('Stats calendar populated');
 }
